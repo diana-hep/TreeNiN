@@ -62,7 +62,7 @@ experiments/dir_name: dir with all the hyperparameter scan results (weights, log
 utils.py: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
 
 ——————————————————
-synthesize_results.py: Aggregate the metrics of all experiments and outputs a file located at “experiments/dir_name” with a  list where they are sorted. Currently we sort based on best ROC auc.
+synthesize_results.py: Aggregate metrics of all experiments and outputs a file located at “experiments/dir_name” with a  list where they are sorted. Currently we sort based on best ROC auc.
 
 To run: python synthesize_results.py
 
