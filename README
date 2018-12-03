@@ -1,0 +1,68 @@
+RECURSIVE NEURAL NETWORK - Sebastian Macaluso 
+
+
+=================================================================================================
+data
+ 
+- inputTress: All the raw data with the jet clustering history
+- input_batches_pad: Batches of input data for the RecNN
+
+
+=================================================================================================
+pytorch
+Working dir with the batch training implementation 
+
+——————————————————
+search_hyperparams.py: main file that calls train.py and evaluate.py, and runs hyperparameters searches
+
+Parameters to specify before running:
+sample_name
+multi_scan function arguments
+
+To run:
+~/recnn/pytorch$ python search_hyperparams.py --gpu=0 &> experiments/simple_rnn_kt/log_gpu0 &
+——————————————————
+train.py: Call all the other files to load the raw data, create the jet trees, create the batches and train the model. This file calls model/recNet.py, model/data_loader.py and utils.py
+
+Parameters to specify before running:
+make_batch
+pT_order
+nyu
+sample_name (if running from search_hyperparams.py, then “sample_name” will be overwritten)
+sg
+bg
+
+To run as a stand-alone code:
+~/recnn/pytorch$ CUDA_VISIBLE_DEVICES=1 python -u train.py --model_dir=experiments/nyu_antikt-kt-delphes_test &> experiments/nyu_antikt-kt-delphes_test/log_nyu_antikt-kt-delphes &
+——————————————————
+evaluate.py: loads the weights that give the best val accuracy and gets the accuracy, tpr, fpr, and ROC auc over the test set.
+
+Parameters to specify before running:
+nyu
+sample_name (if running from search_hyperparams.py, then “sample_name” will be overwritten)
+
+To run as a stand-alone code:
+~/recnn/pytorch$ CUDA_VISIBLE_DEVICES=2 python evaluate.py --model_dir=experiments/nyu_antikt-antikt > experiments/nyu_antikt-antikt/log_eval_nyu_antikt-antikt
+——————————————————
+model/recNet.py: model architecture for batch training and accuracy function.
+
+model/data_loader.py: Classes and functions to load the raw data and create the batches:
+
+ - Load the jet events and make the trees.
+ - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.
+ - Load the jet trees, reorganize the tree by levels, create a batch of N jets by appending the nodes of each jet to each level and add zero padding so that all the levels have the same size
+ - Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline
+ - Loads the DataLoader class to create the train, val, test datasets
+——————————————————
+experiments/template_params.json:  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
+
+experiments/dir_name: dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture
+
+——————————————————
+utils.py: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
+
+——————————————————
+synthesize_results.py: Aggregate the metrics of all experiments and outputs a file located at “experiments/dir_name” with a  list where they are sorted. Currently we sort based on best ROC auc.
+
+To run: python synthesize_results.py
+
