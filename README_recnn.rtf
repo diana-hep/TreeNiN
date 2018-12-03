@@ -1,0 +1,133 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\csgray\c0\c0;}
+\margl1440\margr1440\vieww22680\viewh12780\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs28 \cf0 RECURSIVE NEURAL NETWORK
+\b0  - Sebastian Macaluso \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 =================================================================================================\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\b\fs36 \cf0 data
+\b0\fs28 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0  \
+- 
+\b inputTress
+\b0 : All the raw data with the jet clustering history\
+- 
+\b input_batches_pad
+\b0 : Batches of input data for the RecNN\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf2 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+=================================================================================================\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b\fs36 \cf0 pytorch
+\b0\fs28 \
+Working dir with the batch training implementation \
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 search_hyperparams.py: 
+\b0 main file that calls train.py and evaluate.py, and runs hyperparameters searches\
+\
+Parameters to specify before running:\
+sample_name\
+multi_scan function arguments\
+\
+To run:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1 \cf2 \cb3 \CocoaLigature0 ~/recnn/pytorch$ python search_hyperparams.py --gpu=0 &> experiments/simple_rnn_kt/log_gpu0 &
+\f0 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 train.py
+\b0 : Call all the other files to load the raw data, create the jet trees, create the batches and train the model. This file calls model/recNet.py, model/data_loader.py and utils.py\
+\
+Parameters to specify before running:\
+make_batch\
+pT_order\
+nyu\
+sample_name (if running from search_hyperparams.py, then \'93sample_name\'94 will be overwritten)\
+sg\
+bg\
+\
+To run as a stand-alone code:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1 \cf2 \cb3 \CocoaLigature0 ~/recnn/pytorch$ CUDA_VISIBLE_DEVICES=1 python -u train.py --model_dir=experiments/nyu_antikt-kt-delphes_test &> experiments/nyu_antikt-kt-delphes_test/log_nyu_antikt-kt-delphes &
+\f0 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 evaluate.py: 
+\b0 loads the weights that give the best val accuracy and gets the accuracy, tpr, fpr, and ROC auc over the test set.\
+\
+Parameters to specify before running:\
+nyu\
+sample_name (if running from search_hyperparams.py, then \'93sample_name\'94 will be overwritten)\
+\
+To run as a stand-alone code:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1 \cf2 \cb3 \CocoaLigature0 ~/recnn/pytorch$ CUDA_VISIBLE_DEVICES=2 python evaluate.py --model_dir=experiments/nyu_antikt-antikt > experiments/nyu_antikt-antikt/log_eval_nyu_antikt-antikt
+\f0 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b \cf0 model/recNet.py
+\b0 : model architecture for batch training and accuracy function.\
+\
+
+\b model/data_loader.py
+\b0 : Classes and functions to load the raw data and create the batches:\
+\
+ - Load the jet events and make the trees.\
+ - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.\
+ - Load the jet trees, reorganize the tree by levels, create a batch of N jets by appending the nodes of each jet to each level and add zero padding so that all the levels have the same size\
+ - Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline\
+ - Loads the DataLoader class to create the train, val, test datasets\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+
+\b experiments/template_params.json
+\b0 :  Template file that contains all the architecture parameters and training hyperparameters for a specific run. \'93search_hyperparams.py\'94 modifies these parameters for each scan\
+\
+
+\b experiments/dir_name: 
+\b0 dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+
+\b utils.py
+\b0 : auxiliary functions for training, logging, loading hyperparameters from json file, etc.\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+
+\b synthesize_results.py: 
+\b0 Aggregate the metrics of all experiments and outputs a file located at \'93experiments/dir_name\'94 with a  list where they are sorted. Currently we sort based on best ROC auc.
+\b \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0 \cf2 \cb3 To run:
+\b  
+\f1\b0 \CocoaLigature0 python synthesize_results.py\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b \cf0 \cb1 \CocoaLigature1 \
+}

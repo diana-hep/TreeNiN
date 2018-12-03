@@ -1,0 +1,193 @@
+2018-11-01 13:28:53,408:INFO: search_hyperparam_sample_name=top_qcd_jets_antikt_kt__80000_Njets_128_batch10_features
+2018-11-01 13:28:53,410:INFO: Number of jet files for ttbar=200
+2018-11-01 13:28:53,410:INFO: Loading ttbar jet files... 
+2018-11-01 13:28:53,410:INFO: ttbar files list = ['tree_httv2_ttbar_DelphesPythia8_nompi_0.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_1.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_10.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_100.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_101.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_102.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_103.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_104.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_105.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_106.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_107.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_108.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_109.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_11.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_110.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_111.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_112.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_113.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_114.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_115.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_116.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_117.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_118.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_119.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_12.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_120.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_121.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_122.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_123.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_124.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_125.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_126.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_127.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_128.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_129.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_13.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_130.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_131.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_132.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_133.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_134.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_135.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_136.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_137.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_138.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_139.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_14.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_140.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_141.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_142.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_143.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_144.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_145.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_146.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_147.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_148.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_149.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_15.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_150.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_151.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_152.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_153.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_154.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_155.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_156.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_157.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_158.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_159.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_16.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_160.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_161.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_162.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_163.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_164.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_165.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_166.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_167.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_168.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_169.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_17.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_170.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_171.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_172.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_173.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_174.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_175.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_176.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_177.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_178.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_179.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_18.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_180.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_181.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_182.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_183.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_184.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_185.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_186.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_187.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_188.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_189.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_19.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_190.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_191.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_192.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_193.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_194.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_195.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_196.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_197.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_198.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_199.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_2.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_20.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_21.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_22.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_23.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_24.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_25.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_26.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_27.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_28.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_29.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_3.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_30.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_31.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_32.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_33.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_34.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_35.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_36.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_37.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_38.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_39.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_4.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_40.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_41.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_42.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_43.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_44.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_45.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_46.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_47.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_48.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_49.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_5.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_50.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_51.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_52.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_53.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_54.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_55.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_56.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_57.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_58.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_59.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_6.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_60.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_61.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_62.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_63.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_64.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_65.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_66.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_67.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_68.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_69.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_7.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_70.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_71.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_72.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_73.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_74.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_75.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_76.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_77.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_78.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_79.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_8.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_80.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_81.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_82.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_83.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_84.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_85.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_86.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_87.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_88.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_89.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_9.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_90.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_91.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_92.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_93.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_94.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_95.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_96.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_97.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_98.dat', 'tree_httv2_ttbar_DelphesPythia8_nompi_99.dat']
+2018-11-01 13:28:55,215:INFO: Ntotjets=10000
+2018-11-01 13:28:56,832:INFO: Ntotjets=20000
+2018-11-01 13:28:58,446:INFO: Ntotjets=30000
+2018-11-01 13:29:00,082:INFO: Ntotjets=40000
+2018-11-01 13:29:01,701:INFO: Ntotjets=50000
+2018-11-01 13:29:03,325:INFO: Ntotjets=60000
+2018-11-01 13:29:05,007:INFO: Ntotjets=70000
+2018-11-01 13:29:06,634:INFO: Ntotjets=80000
+2018-11-01 13:29:06,635:INFO: Number of jet files for qcd=200
+2018-11-01 13:29:06,635:INFO: Loading qcd jet files... 
+2018-11-01 13:29:06,636:INFO: qcd files list = ['tree_httv2_qcd_DelphesPythia8_nompi_0.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_1.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_10.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_100.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_101.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_102.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_103.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_104.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_105.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_106.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_107.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_108.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_109.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_11.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_110.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_111.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_112.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_113.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_114.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_115.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_116.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_117.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_118.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_119.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_12.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_120.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_121.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_122.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_123.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_124.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_125.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_126.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_127.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_128.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_129.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_13.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_130.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_131.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_132.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_133.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_134.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_135.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_136.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_137.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_138.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_139.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_14.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_140.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_141.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_142.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_143.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_144.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_145.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_146.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_147.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_148.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_149.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_15.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_150.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_151.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_152.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_153.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_154.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_155.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_156.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_157.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_158.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_159.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_16.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_160.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_161.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_162.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_163.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_164.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_165.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_166.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_167.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_168.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_169.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_17.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_170.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_171.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_172.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_173.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_174.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_175.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_176.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_177.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_178.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_179.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_18.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_180.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_181.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_182.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_183.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_184.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_185.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_186.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_187.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_188.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_189.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_19.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_190.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_191.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_192.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_193.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_194.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_195.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_196.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_197.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_198.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_199.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_2.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_20.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_21.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_22.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_23.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_24.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_25.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_26.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_27.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_28.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_29.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_3.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_30.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_31.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_32.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_33.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_34.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_35.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_36.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_37.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_38.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_39.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_4.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_40.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_41.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_42.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_43.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_44.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_45.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_46.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_47.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_48.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_49.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_5.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_50.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_51.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_52.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_53.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_54.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_55.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_56.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_57.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_58.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_59.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_6.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_60.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_61.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_62.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_63.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_64.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_65.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_66.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_67.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_68.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_69.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_7.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_70.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_71.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_72.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_73.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_74.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_75.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_76.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_77.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_78.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_79.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_8.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_80.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_81.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_82.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_83.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_84.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_85.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_86.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_87.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_88.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_89.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_9.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_90.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_91.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_92.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_93.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_94.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_95.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_96.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_97.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_98.dat', 'tree_httv2_qcd_DelphesPythia8_nompi_99.dat']
+2018-11-01 13:29:08,069:INFO: Ntotjets=10000
+2018-11-01 13:29:09,490:INFO: Ntotjets=20000
+2018-11-01 13:29:10,907:INFO: Ntotjets=30000
+2018-11-01 13:29:12,341:INFO: Ntotjets=40000
+2018-11-01 13:29:13,767:INFO: Ntotjets=50000
+2018-11-01 13:29:15,179:INFO: Ntotjets=60000
+2018-11-01 13:29:16,592:INFO: Ntotjets=70000
+2018-11-01 13:29:18,010:INFO: Ntotjets=80000
+2018-11-01 13:29:18,011:INFO: Tree generation time (minutes) =0.4100405732790629
+2018-11-01 13:38:20,407:INFO: Splitting into train, validation and test datasets, and shuffling...
+2018-11-01 13:38:45,059:INFO: Split sample time (minutes) =9.86084821621577
+2018-11-01 13:38:45,059:INFO: Creating train batches ...
+2018-11-01 13:38:48,085:INFO: Number of batches created=100
+2018-11-01 13:38:51,143:INFO: Number of batches created=200
+2018-11-01 13:38:54,188:INFO: Number of batches created=300
+2018-11-01 13:38:57,248:INFO: Number of batches created=400
+2018-11-01 13:39:00,314:INFO: Number of batches created=500
+2018-11-01 13:39:03,365:INFO: Number of batches created=600
+2018-11-01 13:39:06,408:INFO: Number of batches created=700
+2018-11-01 13:39:07,947:INFO: Creating val batches ...
+2018-11-01 13:39:11,014:INFO: Number of batches created=100
+2018-11-01 13:39:14,066:INFO: Number of batches created=200
+2018-11-01 13:39:15,591:INFO: Creating test batches ...
+2018-11-01 13:39:18,679:INFO: Number of batches created=100
+2018-11-01 13:39:21,746:INFO: Number of batches created=200
+2018-11-01 13:39:23,313:INFO: Number of test_batches=250
+2018-11-01 13:39:23,313:INFO: Batch generation time (minutes) =10.498407220840454
+2018-11-01 13:39:23,313:INFO: Train and val batch size=128
+2018-11-01 13:39:23,313:INFO: Number of train_batches=750
+2018-11-01 13:39:23,313:INFO: Number of val_batches=250
+2018-11-01 13:39:41,297:INFO: ------------------------------------------------------------
+2018-11-01 13:39:41,297:INFO: Loading the datasets...
+2018-11-01 13:39:43,965:INFO: - done loading the datasets
+2018-11-01 13:39:43,965:INFO: ------------------------------------------------------------
+2018-11-01 13:39:46,174:INFO: Building optimizer...
+2018-11-01 13:39:46,175:INFO: Starting training for 40 epoch(s)
+2018-11-01 13:39:46,175:INFO: Epoch 1/40
+2018-11-01 13:40:10,014:INFO: - Train metrics: accuracy: 0.822 ; loss: 1.687
+2018-11-01 13:40:15,061:INFO: - Eval metrics : accuracy: 0.888 ; loss: 0.276
+2018-11-01 13:40:15,129:INFO: - Found new best accuracy
+2018-11-01 13:40:15,130:INFO: Epoch 2/40
+2018-11-01 13:40:38,447:INFO: - Train metrics: accuracy: 0.908 ; loss: 0.236
+2018-11-01 13:40:42,952:INFO: - Eval metrics : accuracy: 0.898 ; loss: 0.238
+2018-11-01 13:40:42,987:INFO: - Found new best accuracy
+2018-11-01 13:40:42,988:INFO: Epoch 3/40
+2018-11-01 13:41:06,681:INFO: - Train metrics: accuracy: 0.910 ; loss: 0.228
+2018-11-01 13:41:11,015:INFO: - Eval metrics : accuracy: 0.908 ; loss: 0.225
+2018-11-01 13:41:11,053:INFO: - Found new best accuracy
+2018-11-01 13:41:11,053:INFO: Epoch 4/40
+2018-11-01 13:41:34,317:INFO: - Train metrics: accuracy: 0.911 ; loss: 0.214
+2018-11-01 13:41:38,859:INFO: - Eval metrics : accuracy: 0.910 ; loss: 0.215
+2018-11-01 13:41:38,863:INFO: - Found new best accuracy
+2018-11-01 13:41:38,864:INFO: Epoch 5/40
+2018-11-01 13:42:01,947:INFO: - Train metrics: accuracy: 0.930 ; loss: 0.195
+2018-11-01 13:42:06,365:INFO: - Eval metrics : accuracy: 0.907 ; loss: 0.219
+2018-11-01 13:42:06,407:INFO: Epoch 6/40
+2018-11-01 13:42:29,933:INFO: - Train metrics: accuracy: 0.918 ; loss: 0.205
+2018-11-01 13:42:34,391:INFO: - Eval metrics : accuracy: 0.917 ; loss: 0.200
+2018-11-01 13:42:34,405:INFO: - Found new best accuracy
+2018-11-01 13:42:34,406:INFO: Epoch 7/40
+2018-11-01 13:42:57,570:INFO: - Train metrics: accuracy: 0.927 ; loss: 0.190
+2018-11-01 13:43:02,000:INFO: - Eval metrics : accuracy: 0.921 ; loss: 0.193
+2018-11-01 13:43:02,040:INFO: - Found new best accuracy
+2018-11-01 13:43:02,040:INFO: Epoch 8/40
+2018-11-01 13:43:24,818:INFO: - Train metrics: accuracy: 0.918 ; loss: 0.179
+2018-11-01 13:43:29,210:INFO: - Eval metrics : accuracy: 0.922 ; loss: 0.190
+2018-11-01 13:43:29,248:INFO: - Found new best accuracy
+2018-11-01 13:43:29,248:INFO: Epoch 9/40
+2018-11-01 13:43:52,054:INFO: - Train metrics: accuracy: 0.923 ; loss: 0.181
+2018-11-01 13:43:56,402:INFO: - Eval metrics : accuracy: 0.920 ; loss: 0.195
+2018-11-01 13:43:56,439:INFO: Epoch 10/40
+2018-11-01 13:44:19,346:INFO: - Train metrics: accuracy: 0.927 ; loss: 0.183
+2018-11-01 13:44:23,859:INFO: - Eval metrics : accuracy: 0.924 ; loss: 0.186
+2018-11-01 13:44:23,901:INFO: - Found new best accuracy
+2018-11-01 13:44:23,901:INFO: Epoch 11/40
+2018-11-01 13:44:46,273:INFO: - Train metrics: accuracy: 0.928 ; loss: 0.178
+2018-11-01 13:44:50,658:INFO: - Eval metrics : accuracy: 0.925 ; loss: 0.184
+2018-11-01 13:44:50,694:INFO: - Found new best accuracy
+2018-11-01 13:44:50,694:INFO: Epoch 12/40
+2018-11-01 13:45:13,414:INFO: - Train metrics: accuracy: 0.926 ; loss: 0.171
+2018-11-01 13:45:17,820:INFO: - Eval metrics : accuracy: 0.925 ; loss: 0.182
+2018-11-01 13:45:17,861:INFO: Epoch 13/40
+2018-11-01 13:45:40,615:INFO: - Train metrics: accuracy: 0.924 ; loss: 0.170
+2018-11-01 13:45:45,022:INFO: - Eval metrics : accuracy: 0.925 ; loss: 0.186
+2018-11-01 13:45:45,059:INFO: Epoch 14/40
+2018-11-01 13:46:08,017:INFO: - Train metrics: accuracy: 0.928 ; loss: 0.164
+2018-11-01 13:46:12,539:INFO: - Eval metrics : accuracy: 0.925 ; loss: 0.184
+2018-11-01 13:46:12,577:INFO: Epoch 15/40
+2018-11-01 13:46:35,778:INFO: - Train metrics: accuracy: 0.928 ; loss: 0.162
+2018-11-01 13:46:40,176:INFO: - Eval metrics : accuracy: 0.926 ; loss: 0.183
+2018-11-01 13:46:40,210:INFO: - Found new best accuracy
+2018-11-01 13:46:40,211:INFO: Epoch 16/40
+2018-11-01 13:47:03,154:INFO: - Train metrics: accuracy: 0.938 ; loss: 0.155
+2018-11-01 13:47:07,580:INFO: - Eval metrics : accuracy: 0.926 ; loss: 0.183
+2018-11-01 13:47:07,618:INFO: Epoch 17/40
+2018-11-01 13:47:29,847:INFO: - Train metrics: accuracy: 0.934 ; loss: 0.152
+2018-11-01 13:47:34,227:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.181
+2018-11-01 13:47:34,260:INFO: - Found new best accuracy
+2018-11-01 13:47:34,260:INFO: Epoch 18/40
+2018-11-01 13:47:55,724:INFO: - Train metrics: accuracy: 0.941 ; loss: 0.152
+2018-11-01 13:48:00,226:INFO: - Eval metrics : accuracy: 0.926 ; loss: 0.182
+2018-11-01 13:48:00,252:INFO: Epoch 19/40
+2018-11-01 13:48:23,520:INFO: - Train metrics: accuracy: 0.944 ; loss: 0.148
+2018-11-01 13:48:28,025:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.180
+2018-11-01 13:48:28,060:INFO: Epoch 20/40
+2018-11-01 13:48:50,615:INFO: - Train metrics: accuracy: 0.947 ; loss: 0.141
+2018-11-01 13:48:54,949:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.182
+2018-11-01 13:48:54,986:INFO: - Found new best accuracy
+2018-11-01 13:48:54,986:INFO: Epoch 21/40
+2018-11-01 13:49:17,918:INFO: - Train metrics: accuracy: 0.943 ; loss: 0.138
+2018-11-01 13:49:22,334:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.182
+2018-11-01 13:49:22,369:INFO: Epoch 22/40
+2018-11-01 13:49:45,178:INFO: - Train metrics: accuracy: 0.948 ; loss: 0.137
+2018-11-01 13:49:49,673:INFO: - Eval metrics : accuracy: 0.928 ; loss: 0.181
+2018-11-01 13:49:49,710:INFO: - Found new best accuracy
+2018-11-01 13:49:49,711:INFO: Epoch 23/40
+2018-11-01 13:50:12,538:INFO: - Train metrics: accuracy: 0.952 ; loss: 0.135
+2018-11-01 13:50:16,936:INFO: - Eval metrics : accuracy: 0.928 ; loss: 0.180
+2018-11-01 13:50:16,977:INFO: - Found new best accuracy
+2018-11-01 13:50:16,977:INFO: Epoch 24/40
+2018-11-01 13:50:40,079:INFO: - Train metrics: accuracy: 0.944 ; loss: 0.137
+2018-11-01 13:50:44,581:INFO: - Eval metrics : accuracy: 0.928 ; loss: 0.182
+2018-11-01 13:50:44,621:INFO: Epoch 25/40
+2018-11-01 13:51:07,779:INFO: - Train metrics: accuracy: 0.948 ; loss: 0.135
+2018-11-01 13:51:12,116:INFO: - Eval metrics : accuracy: 0.928 ; loss: 0.181
+2018-11-01 13:51:12,158:INFO: Epoch 26/40
+2018-11-01 13:51:35,004:INFO: - Train metrics: accuracy: 0.948 ; loss: 0.133
+2018-11-01 13:51:39,467:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.182
+2018-11-01 13:51:39,501:INFO: Epoch 27/40
+2018-11-01 13:52:00,576:INFO: - Train metrics: accuracy: 0.947 ; loss: 0.131
+2018-11-01 13:52:04,969:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.183
+2018-11-01 13:52:04,972:INFO: Epoch 28/40
+2018-11-01 13:52:27,798:INFO: - Train metrics: accuracy: 0.949 ; loss: 0.130
+2018-11-01 13:52:32,292:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.183
+2018-11-01 13:52:32,334:INFO: Epoch 29/40
+2018-11-01 13:52:55,184:INFO: - Train metrics: accuracy: 0.953 ; loss: 0.129
+2018-11-01 13:52:59,568:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.184
+2018-11-01 13:52:59,608:INFO: Epoch 30/40
+2018-11-01 13:53:22,610:INFO: - Train metrics: accuracy: 0.951 ; loss: 0.128
+2018-11-01 13:53:27,143:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.184
+2018-11-01 13:53:27,183:INFO: Epoch 31/40
+2018-11-01 13:53:49,888:INFO: - Train metrics: accuracy: 0.954 ; loss: 0.128
+2018-11-01 13:53:54,286:INFO: - Eval metrics : accuracy: 0.927 ; loss: 0.184
+2018-11-01 13:53:54,321:INFO: Epoch 32/40
+2018-11-01 13:54:17,274:INFO: - Train metrics: accuracy: 0.952 ; loss: 0.128
+2018-11-01 13:54:21,657:INFO: - Eval metrics : accuracy: 0.928 ; loss: 0.182
+2018-11-01 13:54:21,693:INFO: - Found new best accuracy
+2018-11-01 13:54:21,693:INFO: Epoch 33/40
+2018-11-01 13:54:44,034:INFO: - Train metrics: accuracy: 0.951 ; loss: 0.127
+2018-11-01 13:54:48,373:INFO: - Eval metrics : accuracy: 0.929 ; loss: 0.182
+2018-11-01 13:54:48,410:INFO: - Found new best accuracy
+2018-11-01 13:54:48,410:INFO: Epoch 34/40
+2018-11-01 13:55:11,433:INFO: - Train metrics: accuracy: 0.949 ; loss: 0.127
+2018-11-01 13:55:15,956:INFO: - Eval metrics : accuracy: 0.929 ; loss: 0.181
+2018-11-01 13:55:15,996:INFO: - Found new best accuracy
+2018-11-01 13:55:15,996:INFO: Epoch 35/40
+2018-11-01 13:55:38,244:INFO: - Train metrics: accuracy: 0.954 ; loss: 0.126
+2018-11-01 13:55:42,639:INFO: - Eval metrics : accuracy: 0.929 ; loss: 0.181
+2018-11-01 13:55:42,685:INFO: - Found new best accuracy
+2018-11-01 13:55:42,685:INFO: Epoch 36/40
+2018-11-01 13:56:05,506:INFO: - Train metrics: accuracy: 0.957 ; loss: 0.126
+2018-11-01 13:56:09,900:INFO: - Eval metrics : accuracy: 0.930 ; loss: 0.182
+2018-11-01 13:56:09,943:INFO: - Found new best accuracy
+2018-11-01 13:56:09,943:INFO: Epoch 37/40
+2018-11-01 13:56:32,893:INFO: - Train metrics: accuracy: 0.956 ; loss: 0.126
+2018-11-01 13:56:37,218:INFO: - Eval metrics : accuracy: 0.930 ; loss: 0.181
+2018-11-01 13:56:37,259:INFO: Epoch 38/40
+2018-11-01 13:57:00,158:INFO: - Train metrics: accuracy: 0.957 ; loss: 0.125
+2018-11-01 13:57:04,489:INFO: - Eval metrics : accuracy: 0.930 ; loss: 0.181
+2018-11-01 13:57:04,526:INFO: - Found new best accuracy
+2018-11-01 13:57:04,526:INFO: Epoch 39/40
+2018-11-01 13:57:27,566:INFO: - Train metrics: accuracy: 0.954 ; loss: 0.125
+2018-11-01 13:57:31,905:INFO: - Eval metrics : accuracy: 0.930 ; loss: 0.181
+2018-11-01 13:57:31,937:INFO: - Found new best accuracy
+2018-11-01 13:57:31,938:INFO: Epoch 40/40
+2018-11-01 13:57:54,258:INFO: - Train metrics: accuracy: 0.954 ; loss: 0.125
+2018-11-01 13:57:58,769:INFO: - Eval metrics : accuracy: 0.930 ; loss: 0.181
+2018-11-01 13:57:58,812:INFO: Total time (minutes) =29.09006450176239

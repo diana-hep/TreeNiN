@@ -1,0 +1,11 @@
+{
+    "learning_rate": 0.01,
+    "decay": 0.8,
+    "batch_size": 512,
+    "num_epochs": 30,
+    "save_summary_steps": 128,
+    "hidden": 40,
+    "features": 7,
+    "number_of_labels_types": 1,
+    "myN_jets": 40000
+}

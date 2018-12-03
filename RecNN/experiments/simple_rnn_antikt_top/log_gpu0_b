@@ -1,0 +1,28 @@
+sample_name=top_qcd_jets_antikt_kt__40000_Njets_128_batch
+------------------------------------------------------------
+Loading the datasets...
+- done loading the datasets
+------------------------------------------------------------
+Building optimizer...
+Starting training for 10 epoch(s)
+Restoring parameters from experiments/simple_rnn_kt/h_dim__lr_0.002_decay_0.9_batch_128_epochs_10_hidden_80_Njets_40000_features_7/best.pth.tar
+Traceback (most recent call last):
+  File "train.py", line 460, in <module>
+    args.restore_file)   
+  File "train.py", line 164, in train_and_evaluate
+    utils.load_checkpoint(restore_path, model, optimizer)
+  File "/home/sm1237/recnn/pytorch/utils.py", line 129, in load_checkpoint
+    raise ValueError("File doesn't exist {}".format(checkpoint))
+ValueError: File doesn't exist experiments/simple_rnn_kt/h_dim__lr_0.002_decay_0.9_batch_128_epochs_10_hidden_80_Njets_40000_features_7/best.pth.tar
+Model dir= experiments/simple_rnn_kt/h_dim__lr_0.002_decay_0.9_batch_128_epochs_10_hidden_80_Njets_40000_features_7
+CUDA_VISIBLE_DEVICES=0 /opt/anaconda3/bin/python train.py --model_dir=experiments/simple_rnn_kt/h_dim__lr_0.002_decay_0.9_batch_128_epochs_10_hidden_80_Njets_40000_features_7 --data_dir=../data/inputTrees/top_qcd_jets_antikt_antikt  --restore_file=best
+Traceback (most recent call last):
+  File "search_hyperparams.py", line 148, in <module>
+    multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[10],hidden_dims=[80],jet_numbers=[40000],dir_name='simple_rnn_kt',name='h_dim_')#gpu0
+  File "search_hyperparams.py", line 113, in multi_scan
+    launch_training_job(parent_dir, args.data_dir, args.eval_data_dir, job_name, params, args.gpu)        
+  File "search_hyperparams.py", line 50, in launch_training_job
+    check_call(cmd_train, shell=True)
+  File "/opt/anaconda3/lib/python3.6/subprocess.py", line 291, in check_call
+    raise CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command 'CUDA_VISIBLE_DEVICES=0 /opt/anaconda3/bin/python train.py --model_dir=experiments/simple_rnn_kt/h_dim__lr_0.002_decay_0.9_batch_128_epochs_10_hidden_80_Njets_40000_features_7 --data_dir=../data/inputTrees/top_qcd_jets_antikt_antikt  --restore_file=best' returned non-zero exit status 1.

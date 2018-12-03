@@ -1,0 +1,12 @@
+{
+    "learning_rate": 0.005,
+    "decay": 0.9,
+    "batch_size": 128,
+    "num_epochs": 40,
+    "save_summary_steps": 128,
+    "hidden": 50,
+    "features": 7,
+    "number_of_labels_types": 1,
+    "myN_jets": 80000,
+    "info": "kt_pT_p_eta_phi_theta"
+}
