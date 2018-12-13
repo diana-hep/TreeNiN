@@ -58,7 +58,7 @@ model/data_loader.py: load the raw data and create the batches:
  - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.
  - Load the jet trees, reorganize the tree by levels, create a batch of N jets by appending the nodes of each jet to each level and add zero padding so that all the levels have the same size
  - Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline
- - Loads the DataLoader class to create the train, val, test datasets
+ 
  
 model/preprocess.py: rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
 
