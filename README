@@ -1,4 +1,4 @@
-RECURSIVE NEURAL NETWORK FOR JET PHYSICS 
+NRECURSIVE NEURAL NETWORK FOR JET PHYSICS 
 PyTorch GPU batch training implementation of G. Louppe, K. Cho, C. Becot and K. Cranmer (arXiv:1702.00748)
 
 Sebastian Macaluso - Dic 10, 2018
@@ -12,7 +12,7 @@ data
 
 
 =================================================================================================
-pytorch
+RecNN
 Working dir with the batch training implementation 
 
 ——————————————————
@@ -23,7 +23,7 @@ sample_name
 multi_scan function arguments
 
 To run:
-~/recnn/pytorch$ python search_hyperparams.py --gpu=0 &> experiments/simple_rnn_kt/log_gpu0 &
+python search_hyperparams.py --gpu=0 &> experiments/simple_rnn_kt/log_gpu0 &
 ——————————————————
 train.py: Call all the other files to load the raw data, create the jet trees, create the batches and train the model. This file calls model/recNet.py, model/data_loader.py and utils.py
 
@@ -36,16 +36,16 @@ sg
 bg
 
 To run as a stand-alone code:
-~/recnn/pytorch$ CUDA_VISIBLE_DEVICES=1 python -u train.py --model_dir=experiments/nyu_antikt-kt-delphes_test &> experiments/nyu_antikt-kt-delphes_test/log_nyu_antikt-kt-delphes &
+CUDA_VISIBLE_DEVICES=1 python -u train.py --model_dir=experiments/nyu_antikt-kt-delphes_test &> experiments/nyu_antikt-kt-delphes_test/log_nyu_antikt-kt-delphes &
 ——————————————————
 evaluate.py: loads the weights that give the best val accuracy and gets the accuracy, tpr, fpr, and ROC auc over the test set.
 
 Parameters to specify before running:
-nyu
+nyu= True or False (To run over the datasets of arXiv:1702.00748. This dataset are not provided here)
 sample_name (if running from search_hyperparams.py, then “sample_name” will be overwritten)
 
 To run as a stand-alone code:
-~/recnn/pytorch$ CUDA_VISIBLE_DEVICES=2 python evaluate.py --model_dir=experiments/nyu_antikt-antikt > experiments/nyu_antikt-antikt/log_eval_nyu_antikt-antikt
+CUDA_VISIBLE_DEVICES=2 python evaluate.py --model_dir=experiments/nyu_antikt-antikt > experiments/nyu_antikt-antikt/log_eval_nyu_antikt-antikt
 ——————————————————
 model/recNet.py: model architecture for batch training and accuracy function.
 
