@@ -52,7 +52,7 @@ CUDA_VISIBLE_DEVICES=2 python evaluate.py --model_dir=experiments/nyu_antikt-ant
 -------------------------------------------------------------------------
 model/recNet.py: model architecture for batch training and accuracy function.
 
-model/data_loader.py: Classes and functions to load the raw data and create the batches:
+model/data_loader.py: load the raw data and create the batches:
 
  - Load the jet events and make the trees.
  - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.
