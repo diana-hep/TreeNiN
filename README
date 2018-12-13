@@ -26,7 +26,7 @@ To run:
 python search_hyperparams.py --gpu=0 &> experiments/simple_rnn_kt/log_gpu0 &
 
 -------------------------------------------------------------------------
-train.py: Call all the other files to load the raw data, create the jet trees, create the batches and train the model. This file calls model/recNet.py, model/data_loader.py and utils.py
+train.py: Call all the other files to load the raw data, create the jet trees, create the batches and train the model. This file calls model/recNet.py, model/data_loader.py, model/preprocess.py and utils.py
 
 Parameters to specify before running:
 make_batch
