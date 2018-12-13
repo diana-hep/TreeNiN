@@ -5,7 +5,7 @@ Sebastian Macaluso - Dic 10, 2018
 
 
 =================================================================================================
-data
+data  (only test samples are provided)
  
 - inputTress: All the raw data with the jet clustering history
 - input_batches_pad: Batches of input data for the RecNN
