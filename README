@@ -29,9 +29,9 @@ python search_hyperparams.py --gpu=0 &> experiments/simple_rnn_kt/log_gpu0 &
 train.py: Call all the other files to load the raw data, create the jet trees, create the batches and train the model. This file calls model/recNet.py, model/data_loader.py, model/preprocess.py and utils.py
 
 Parameters to specify before running:
-make_batch=True or False (To create the batched dataset from the raw data, or use a previously generated batched dataset)
-pT_order=True or False (To reorganize the trees based on pT)
-nyu=True or False (To run over the datasets of arXiv:1702.00748. This datasets are not provided here)
+make_batch=True/False (To create the batched dataset from the raw data, or use a previously generated batched dataset)
+pT_order=True/False (To reorganize the trees based on pT)
+nyu=True/False (To run over the datasets of arXiv:1702.00748. This datasets are not provided here)
 sample_name (if running from search_hyperparams.py, then “sample_name” will be overwritten)
 sg (signal label)
 bg (background label)
