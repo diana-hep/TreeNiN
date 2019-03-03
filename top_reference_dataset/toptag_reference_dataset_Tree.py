@@ -353,7 +353,7 @@ for ifile in range(N_analysis):
       break
 
 # print('reclustered_jets=',reclustered_jets)
-os.system("mkdir -p tree_list")
+os.system("mkdir -p ../data/inputTrees/top_tag_reference_dataset")
 out_filename = '../data/inputTrees/top_tag_reference_dataset/tree_'+subjetlist[ifile].split('.')[0]+'_'+str(counter)+'.pkl'
 
 with open(out_filename, "wb") as f: pickle.dump(reclustered_jets, f, protocol=2) 
