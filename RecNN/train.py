@@ -1,4 +1,5 @@
 """Train the model"""
+"""This is from the pytorch_shuffle dir"""
 
 import argparse
 import logging
@@ -8,14 +9,14 @@ import numpy as np
 import torch
 import torch.optim as optim
 from tqdm import trange
+import tqdm
 from sklearn.utils import check_random_state
-# from sklearn.cross_validation import train_test_split
 from sklearn.model_selection import train_test_split
 import time
 import pickle
-
 import utils
 import model.data_loader as dl
+import model.dataset as dataset
 from model import recNet as net
 from model import preprocess 
 
@@ -45,12 +46,45 @@ def train(model, optimizer, loss_fn, data_iterator, metrics, params, num_steps):
     ##-----------------------------
     # Use tqdm for progress bar
     t = trange(num_steps) 
+    
+    data_iterator_iter = iter(data_iterator)
+    
+    
     for i in t:
     
-        # fetch the next training batch   
-        levels, children, n_inners, contents, n_level, labels_batch = next(data_iterator)
-        output_batch = model(params, levels, children, n_inners, contents, n_level)
+        time_before_batch=time.time() 
+        
+        # fetch the next training batch
+        levels, children, n_inners, contents, n_level, labels_batch=next(data_iterator_iter)
 
+        # shift tensors to GPU if available
+        if params.cuda:
+          levels = levels.cuda()
+          children=children.cuda()
+          n_inners=n_inners.cuda()
+          contents=contents.cuda()
+          n_level= n_level.cuda()
+          labels_batch =labels_batch.cuda()
+      
+        # convert them to Variables to record operations in the computational graph
+        levels=torch.autograd.Variable(levels)
+        children=torch.autograd.Variable(children)
+        n_inners=torch.autograd.Variable(n_inners)
+        contents = torch.autograd.Variable(contents)
+        n_level=torch.autograd.Variable(n_level)
+        labels_batch = torch.autograd.Variable(labels_batch)    
+    
+        time_after_batch=time.time()
+#         logging.info("Batch creation time" + str(time_after_batch-time_before_batch))
+        
+        ##-----------------------------
+        # Feedforward pass through the NN
+        output_batch = model(params, levels, children, n_inners, contents, n_level)
+        
+        
+#         logging.info("Batch usage time" + str(time.time()-time_after_batch))
+#         logging.info('####'*20)
+        
         # compute model output and loss
         labels_batch = labels_batch.float()  #Uncomment if using torch.nn.BCELoss() loss function
         output_batch=output_batch.view((params.batch_size)) # For 1 final neuron 
@@ -93,6 +127,7 @@ def train(model, optimizer, loss_fn, data_iterator, metrics, params, num_steps):
 #     print('metrics_mean=',metrics_mean)
 #     print('metrics_string=',metrics_string)
     
+    
 #-------------------------------------------------------------------------------------------------------------
 def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps):
     """Evaluate the model on `num_steps` batches.
@@ -112,11 +147,35 @@ def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps):
     summ = []
     ##-----------------------------
     # compute metrics over the dataset
+    
+    data_iterator_iter = iter(data_iterator)
+    
     for _ in range(num_steps):
     
         # fetch the next evaluation batch
-        levels, children, n_inners, contents, n_level, labels_batch = next(data_iterator)
+        levels, children, n_inners, contents, n_level, labels_batch=next(data_iterator_iter)
+
+        # shift tensors to GPU if available
+        if params.cuda:
+          levels = levels.cuda()
+          children=children.cuda()
+          n_inners=n_inners.cuda()
+          contents=contents.cuda()
+          n_level= n_level.cuda()
+          labels_batch =labels_batch.cuda()
+
+        # convert them to Variables to record operations in the computational graph
+        levels=torch.autograd.Variable(levels)
+        children=torch.autograd.Variable(children)
+        n_inners=torch.autograd.Variable(n_inners)
+        contents = torch.autograd.Variable(contents)
+        n_level=torch.autograd.Variable(n_level)
+        labels_batch = torch.autograd.Variable(labels_batch)    
+
+        ##-----------------------------
+        # Feedforward pass through the NN
         output_batch = model(params, levels, children, n_inners, contents, n_level)
+
 
         # compute model output
         labels_batch = labels_batch.float() #Uncomment if using torch.nn.BCELoss() loss function
@@ -143,6 +202,7 @@ def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps):
     logging.info("- Eval metrics : " + metrics_string)
     return metrics_mean
 
+
 #-------------------------------------------------------------------------------------------------------------
 def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics, params, model_dir, step_size, restore_file=None):
     """Train the model and evaluate every epoch.
@@ -165,28 +225,52 @@ def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics,
         
     best_val_acc = 0.0
 
-    ##-----------------------------
+    ##------
+    #Create lists to access the lenght below
+    train_data=list(train_data)
+    val_data=list(val_data)    
+#     print('train data lenght=',len(train_data))
+   
+    num_steps_train=len(train_data)//params.batch_size
+    num_steps_val=len(val_data)//params.batch_size
+      
+    # We truncate the dataset so that we get an integer number of batches    
+    train_x=np.asarray([x for (x,y) in train_data][0:num_steps_train*params.batch_size])
+    train_y=np.asarray([y for (x,y) in train_data][0:num_steps_train*params.batch_size])        
+    val_x=np.asarray([x for (x,y) in val_data][0:num_steps_val*params.batch_size])
+    val_y=np.asarray([y for (x,y) in val_data][0:num_steps_val*params.batch_size])
     
+    ##------
+    # Create tain and val datasets. Customized dataset class: dataset.TreeDataset that will create the batches by calling data_loader.batch_nyu_pad. 
+    train_data = dataset.TreeDataset(data=train_x,labels=train_y,transform=data_loader.batch_nyu_pad,batch_size=params.batch_size,features=params.features)
     
+    val_data = dataset.TreeDataset(data=val_x,labels=val_y,transform=data_loader.batch_nyu_pad,batch_size=params.batch_size,features=params.features,shuffle=False)
+  
+    ##------
+    # Create the dataloader for the train and val sets (default Pytorch dataloader). Paralelize the batch generation with num_workers. BATCH SIZE SHOULD ALWAYS BE = 1 (batches are only loaded here as a single element, and they are created with dataset.TreeDataset).
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size=1, shuffle=False,
+                                               num_workers=8, pin_memory=True, collate_fn=dataset.customized_collate) 
+                                               
+    val_loader = torch.utils.data.DataLoader(val_data, batch_size=1, shuffle=False,
+                                               num_workers=8, pin_memory=True, collate_fn=dataset.customized_collate) 
+    
+    ##------
+    # Train/evaluate for each epoch
     for epoch in range(params.num_epochs):
-        # Run one epoch
+    
         logging.info("Epoch {}/{}".format(epoch + 1, params.num_epochs))
-
-        # define the data iterator to feed the data and call the training function
-        train_data_iterator = data_loader.make_pad_batch_iterator_level(train_data, params.batch_size)
-        train(model, optimizer, loss_fn, train_data_iterator, metrics, params, num_steps_train)
+      
+        # Train one epoch
+        train(model, optimizer, loss_fn, train_loader, metrics, params, num_steps_train)
             
         # Evaluate for one epoch on validation set
-        val_data_iterator = data_loader.make_pad_batch_iterator_level(val_data, params.batch_size)
-        val_metrics = evaluate(model, loss_fn, val_data_iterator, metrics, params, num_steps_val)
-        
+        val_metrics = evaluate(model, loss_fn, val_loader, metrics, params, num_steps_val)      
         val_acc = val_metrics['accuracy']
         is_best = val_acc >= best_val_acc
         
         scheduler.step()
         step_size = step_size * decay
         
-
         # Save weights
         utils.save_checkpoint({'epoch': epoch + 1,
                                'state_dict': model.state_dict(),
@@ -214,50 +298,52 @@ if __name__=='__main__':
 
   ##----------------------------------------------------------------------------------------------------------
   # Global variables
-  ##-----------------
+  ##-------------------
   data_dir='../data/'
   os.system('mkdir -p '+data_dir)
   
   # Select the right dir for jets data
-  batches_dir='input_batches_pad/'
-  os.system('mkdir -p '+data_dir+'/'+batches_dir)
+  trees_dir='preprocessed_trees/'
+  os.system('mkdir -p '+data_dir+'/'+trees_dir)
   
-  ##-----------------
-  #If true the batchization of the data is generated. Do it only once and the turn in off
-  make_batch=True
-#   make_batch=False
+  ##-------------------
+  #If true the preprocessed trees are generated and saved. Do it only once and then turn in off
+#   make_preprocess=True
+#   make_preprocess=False
 
 #   pT_order=True
   pT_order=False
 
   # Select the input sample
 #   nyu=True
-  nyu=False
+#   nyu=False
   
-  ##-----------------  
-  if nyu==True:
-    #Directory with the input trees
-    sample_name='nyu_jets'
-    
-  #   algo='antikt-antikt-delphes'
-#     algo='antikt-kt-delphes'
-    algo='antikt-antikt'
-  
-    file_name=algo+'-train.pickle'
-  else:
-    algo=''
-    
-    #Directory with the input trees
-    ### CHECK THAT SEARCH_HYPERPARAMS.PY HAS THE SAME SAMPLE NAME
-    
-#     sample_name='top_qcd_jets_antikt_antikt'
-#     sample_name='top_qcd_jets_antikt_kt'
-    sample_name='top_qcd_jets_antikt_CA'
+  sample_name=''
+  algo=''
+  ##-------------------  
+#   if nyu==True:
+#     #Directory with the input trees
+#     sample_name='nyu_jets'
+#     
+#   #   algo='antikt-antikt-delphes'
+# #     algo='antikt-kt-delphes'
+# #     algo='antikt-antikt'
+#     algo=''
+#     
+#   else:
+#     algo=''
+#     
+#     #Directory with the input trees
+#     ### CHECK THAT SEARCH_HYPERPARAMS.PY HAS THE SAME SAMPLE NAME
+#     
+# #     sample_name='top_qcd_jets_antikt_antikt'
+# #     sample_name='top_qcd_jets_antikt_kt'
+#     sample_name='top_qcd_jets_antikt_CA'
     
     #labels to look for the input files
   #   sg='tt'
-    sg='ttbar' 
-    bg='qcd'
+  sg='ttbar' 
+  bg='qcd'
   
 
   
@@ -269,6 +355,8 @@ if __name__=='__main__':
                       help="Optional, name of the file in --model_dir containing weights to reload before \
                       training")  # 'best' or 'last'
   
+  parser.add_argument('--jet_algorithm', default=algo, help="jet algorithm")
+  parser.add_argument('--architecture', default='simpleRecNN', help="RecNN architecture")
   
   # Load the parameters from json file
   args = parser.parse_args()
@@ -276,170 +364,49 @@ if __name__=='__main__':
   assert os.path.isfile(json_path), "No json configuration file found at {}".format(json_path)
   params = utils.Params(json_path)
 
-  ##-----------------
+  ##-------------------
   # Set the logger
   utils.set_logger(os.path.join(args.model_dir, 'train.log'))
   
   dir_jets_subjets= args.data_dir
+  algo=args.jet_algorithm
   
-
-  # Output file names with the batches of data. We rewrite the sample name if running from search_hyperparam.py
+  architecture=args.architecture
+  
+  ##-------------------
+  # Define file names with the trees of data. We rewrite the sample name if running from search_hyperparam.py
   sample_name=str(args.data_dir).split('/')[-1]
-
   logging.info('sample_name={}'.format(sample_name))
   logging.info('----'*20)
-#   batch_filename=sample_name+'_'+algo+'_'+str(params.myN_jets)+'_Njets_'+str(params.batch_size)+'_batch'
-  batch_filename=sample_name+'_'+algo+'_'+str(params.myN_jets)+'_Njets_'+str(params.batch_size)+'_batch'+'_'+str(params.info)
-  logging.info('batch_filename={}'.format(batch_filename))
-  train_data=data_dir+batches_dir+'train_'+batch_filename+'.pkl'
-  val_data=data_dir+batches_dir+'dev_'+batch_filename+'.pkl'
-  test_data=data_dir+batches_dir+'test_'+batch_filename+'.pkl'
   
+    # sample_filename=sample_name+'_'+algo+'_'+str(params.myN_jets)+'_Njets_'+str(params.batch_size)+'_batch'+'_'+str(params.info)
+  sample_filename=sample_name+'_'+algo+'_'+str(params.myN_jets)+'_Njets_'+str(params.info)
   
-  transformer_filename=sample_name+'_'+algo+'_'+str(params.myN_jets)+'_Njets_'
-  transformer_data=data_dir+batches_dir+'transformer_'+transformer_filename+'.pkl'
+  logging.info('sample_filename={}'.format(sample_filename))
   
-  start_time = time.time()
-  
-  ##-----------------------------------------------------------------------------------------------
-  data_loader=dl.DataLoader # Main class with the methods to load the raw data and create the batches
-  
-  # Create the batches (do it only once, then turn make_batch=False)
-  if make_batch==True:
+  train_data=data_dir+trees_dir+'train_'+sample_filename+'.pkl'
+  val_data=data_dir+trees_dir+'dev_'+sample_filename+'.pkl'
+  test_data=data_dir+trees_dir+'test_'+sample_filename+'.pkl'
     
-    if nyu==True: # We load the nyu samples
-        
-      nyu_train=dir_jets_subjets+'/'+file_name
-      # loading dataset_params and make trees
-      logging.info('nyu_train={}'.format(nyu_train))
-      fd = open(nyu_train, "rb")
-      X, Y = pickle.load(fd,encoding='latin-1')
-      fd.close()
-      
-      X=np.asarray(X)
-      Y=np.asarray(Y)
-      
-      logging.info('Training data size={}'.format(len(X)))
-      logging.info('---'*20)
-      
-      # Shuffle the sets
-      indices = check_random_state(1).permutation(len(X))
-      X = X[indices]
-      Y = Y[indices]  
-      X=np.asarray(X)
-      Y=np.asarray(Y)
-      
-      # Preprocessing steps: Ensure that the left sub-jet has always a larger pt than the right. Change the input variables (features)
-      X = [preprocess.extract(preprocess.permute_by_pt(preprocess.rewrite_content(jet))) for jet in X]
-# 
-#       # Apply RobustScaler (remove outliers, center and scale data)
-#       X=data_loader.scale_features(X) 
-
-      # Split into train+validation
-      logging.info("Splitting into train and validation...")
-      
-      train_x, dev_x, train_y, dev_y = train_test_split(X, Y, test_size=5000, random_state=0)
-
-      # Apply RobustScaler (remove outliers, center and scale data)
-      transformer=data_loader.get_transformer(train_x)
-      # Save transformer
-      with open(transformer_data, "wb") as f: pickle.dump(transformer, f)
-      
-      
-      #Scale features using the training set transformer
-      train_x = data_loader.transform_features(transformer,train_x)
-      dev_x = data_loader.transform_features(transformer,dev_x)
-
-    ##---------------------
-    # Here we use our own samples
-    else:
-      # loading dataset_params and make trees
-      sig_list=data_loader.makeTrees(dir_jets_subjets,sg,params.myN_jets,1)
-      bkg_list=data_loader.makeTrees(dir_jets_subjets,bg,params.myN_jets,0) 
-      elapsed_time=time.time()-start_time
-      logging.info('Tree generation time (minutes) ={}'.format(elapsed_time/60))
-    
-      # Merge sg and bg into an equal size sample and shuffle the sets
-#       X,Y= data_loader.merge_shuffle_sample(sig_list,bkg_list)
-    
-      # Preprocessing steps: Ensure that the left sub-jet has always a larger pt than the right. Change the input variables (features)
-      if pT_order==True:
-        sig_list = [preprocess.extract(preprocess.sequentialize_by_pt(preprocess.permute_by_pt(jet)), params.features) for jet in sig_list]
-        bkg_list = [preprocess.extract(preprocess.sequentialize_by_pt(preprocess.permute_by_pt(jet)), params.features) for jet in bkg_list]       
-      
-      else:
-        sig_list = [preprocess.extract(preprocess.permute_by_pt(jet), params.features,kappa=0.4) for jet in sig_list]
-        bkg_list = [preprocess.extract(preprocess.permute_by_pt(jet), params.features,kappa=0.4) for jet in bkg_list]      
-
-#         sig_list = [preprocess.extract(preprocess.permute_by_pt(jet), params.features) for jet in sig_list]
-#         bkg_list = [preprocess.extract(preprocess.permute_by_pt(jet), params.features) for jet in bkg_list]
-
-      
-#       sig_list = [preprocess.extract(preprocess.permute_by_pt(preprocess.rewrite_content(jet)), params.features) for jet in sig_list]
-#       bkg_list = [preprocess.extract(preprocess.permute_by_pt(preprocess.rewrite_content(jet)), params.features) for jet in bkg_list]     
-     
-      # Split into train+validation+test and shuffle
-      logging.info("Splitting into train, validation and test datasets, and shuffling...")
-      train_x, train_y, dev_x, dev_y, test_x, test_y = data_loader.split_shuffle_sample(sig_list, bkg_list, 0.6, 0.2, 0.2)
+  
+  start_time = time.time()  
+  
+  
 
 
-#       train_x, X_valid, train_y, Y_valid = train_test_split(X, Y, test_size=0.4, random_state=0)
-# 
-#       dev_x, test_x, dev_y, test_y = train_test_split(X_valid, Y_valid, test_size=0.5, random_state=1)
-
-      
-      # Apply RobustScaler (remove outliers, center and scale data)
-      transformer=data_loader.get_transformer(train_x)
-      # Save transformer
-      with open(transformer_data, "wb") as f: pickle.dump(transformer, f)
-      
-      
-      #Scale features using the training set transformer
-      train_x = data_loader.transform_features(transformer,train_x)
-      dev_x = data_loader.transform_features(transformer,dev_x)
-      test_x = data_loader.transform_features(transformer,test_x)
-
-        
-        
-
-    elapsed_time=time.time()-start_time
-    logging.info('Split sample time (minutes) ={}'.format(elapsed_time/60))
-    
-
-    ##-----------------------------------------------------------------------------------------------
-    # Generate dataset batches. 
-    logging.info("Creating train batches ...")    
-    train_batches=dl.batch_array(train_x, train_y, params.batch_size, params.features)
-    logging.info("Creating val batches ...")
-    dev_batches=dl.batch_array(dev_x, dev_y, params.batch_size, params.features)
-    if nyu==False:
-      logging.info("Creating test batches ...")
-      test_batches=dl.batch_array(test_x, test_y, params.batch_size, params.features)
-      logging.info('Number of test_batches={}'.format(len(test_batches)))
-
-    elapsed_time=time.time()-start_time
-    logging.info('Batch generation time (minutes) ={}'.format(elapsed_time/60))
-    logging.info('Train and val batch size={}'.format(params.batch_size))
-    logging.info('Number of train_batches={}'.format(len(train_batches)))
-    logging.info('Number of val_batches={}'.format(len(dev_batches)))
-
-    # Save batches
-    with open(train_data, "wb") as f: pickle.dump(train_batches, f)
-    with open(val_data, "wb") as f: pickle.dump(dev_batches, f)
-    if nyu==False:
-      with open(test_data, "wb") as f: pickle.dump(test_batches, f)
-
-#   sys.exit()
-  ##------------------------------------------------------------------------------------------------
+  ##----------------------------------------------------------------------------------------------------------
   ###   TRAINING
-  ##------------------------------------------------------------------------------------------------
+  ##----------------------------------------------------------------------------------------------------------
+  data_loader=dl.DataLoader # Main class with the methods to load the raw data, create and preprocess the trees
+
+  
   # use GPU if available
   params.cuda = torch.cuda.is_available()
   
   # Set the random seed for reproducible experiments
-  torch.manual_seed(230)
-  if params.cuda: torch.cuda.manual_seed(230)
-
+#   torch.manual_seed(230)
+#   if params.cuda: torch.cuda.manual_seed(230)
+  if params.cuda: torch.cuda.seed()
   ##-----------------------------
   # Create the input data pipeline 
   logging.info('---'*20)
@@ -448,26 +415,51 @@ if __name__=='__main__':
   # Load data 
   with open(train_data, "rb") as f: train_data=pickle.load(f)
   with open(val_data, "rb") as f: val_data=pickle.load(f) 
-     
-  # specify the train and val dataset sizes
-  num_steps_train=len(train_data)
-  num_steps_val=len(val_data)
+
 
   logging.info("- done loading the datasets") 
   logging.info('---'*20)   
   
-  ##---------------------------------------------------------------------
-  ''' OPTIMIZER AND LOSS '''
-  '''----------------------------------------------------------------------- '''
+  ##----------------------------------------------------------------------
+  ## Architecture
+  
   # Define the model and optimizer
-  model = net.GRNNTransformSimple_level(params).cuda() if params.cuda else net.GRNNTransformSimple_level(params)   
 
+  ## a) Simple RecNN 
+  if architecture=='simpleRecNN': 
+    model = net.PredictFromParticleEmbedding(params,make_embedding=net.GRNNTransformSimple).cuda() if params.cuda else net.PredictFromParticleEmbedding(params,make_embedding=net.GRNNTransformSimple) 
+  
+  ##----
+  ## b) Gated RecNN
+  elif architecture=='gatedRecNN':
+    model = net.PredictFromParticleEmbeddingGated(params,make_embedding=net.GRNNTransformGated).cuda() if params.cuda else net.PredictFromParticleEmbeddingGated(params,make_embedding=net.GRNNTransformGated) 
+
+  ## c) Leaves/inner different weights -  RecNN 
+  if architecture=='leaves_inner_RecNN': 
+    model = net.PredictFromParticleEmbeddingLeaves(params,make_embedding=net.GRNNTransformLeaves).cuda() if params.cuda else net.PredictFromParticleEmbeddingLeaves(params,make_embedding=net.GRNNTransformLeaves) 
+
+  ##----
+  ## d) Network in network (NiN) - Simple RecNN
+  elif architecture=='NiNRecNN':
+    model = net.PredictFromParticleEmbeddingNiN(params,make_embedding=net.GRNNTransformSimpleNiN).cuda() if params.cuda else net.PredictFromParticleEmbeddingNiN(params,make_embedding=net.GRNNTransformSimpleNiN)  
+
+  ##----------------------------------------------------------------------
+  # Output number of parameters of the model
+  pytorch_total_params = sum(p.numel() for p in model.parameters())
+  pytorch_total_weights = sum(p.numel() for p in model.parameters() if p.requires_grad)
+  
+  logging.info("Total parameters of the model= {}".format(pytorch_total_params))
+  logging.info("Total weights of the model= {}".format(pytorch_total_weights))
+  
+  ##----------------------------------------------------------------------
+  ## Optimizer and loss function
+  
   logging.info("Model= {}".format(model))
-  logging.info("---"*20)
+  logging.info("---"*20)  
+  logging.info("Building optimizer...")
+  
   step_size=params.learning_rate
   decay=params.decay
-  
-  logging.info("Building optimizer...")
 #   optimizer = optim.SGD(model.parameters(), lr = 0.01, momentum=0.9)
   optimizer = optim.Adam(model.parameters(), lr=step_size)#,eps=1e-05)
   scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=decay)
