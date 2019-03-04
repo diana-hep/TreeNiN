@@ -29,10 +29,9 @@ import time
 
 jet_algorithm=''
 
-#---------------------------------------------------
+#------------------------------------------------------
 #NYU samples
 # sample_name='nyu_jets'
-
 # jet_algorithm='antikt-antikt'
 
 
@@ -40,17 +39,22 @@ jet_algorithm=''
 sample_name='top_tag_reference_dataset'
 jet_algorithm='kt'
 
+#----------------
 # architecture='gatedRecNN'
-# architecture='simpleRecNN'
-
+architecture='simpleRecNN'
 # architecture = 'leaves_inner_RecNN'
-architecture = 'NiNRecNN'
+# architecture = 'NiNRecNN'
+architecture = 'NiNRecNN2L3W'
 
+#----------------
 PREPROCESS=False
 # PREPROCESS=True
 
 TRAIN=True
 # TRAIN=False
+
+load_weights=False
+# load_weights=True
 #----------------------------------------------------
 PYTHON = sys.executable
 parser = argparse.ArgumentParser()
@@ -114,28 +118,21 @@ def launch_training_job(parent_dir, data_dir, eval_data_dir, job_name, params, G
     # Write parameters in json file
     json_path = os.path.join(model_dir, 'params.json')
     params.save(json_path)
-#     
-#     #--------------
-#     #Launch preprocessing
-#     cmd_preprocess = "{python} preprocess_main.py --model_dir={model_dir} --data_dir={data_dir}".format(python=PYTHON, model_dir=model_dir, data_dir=data_dir)
-#     print(cmd_preprocess)
-#     check_call(cmd_preprocess, shell=True)
+
     
+    if load_weights==False: 
+      #---------------
+      # Launch training with this config
+      cmd_train = "CUDA_VISIBLE_DEVICES={gpu} {python} train.py --model_dir={model_dir} --data_dir={data_dir} --jet_algorithm={algo} --architecture={architecture}".format(gpu=GPU, python=PYTHON, model_dir=model_dir, data_dir=data_dir, algo=algo, architecture=architecture)
+      print(cmd_train)
+      check_call(cmd_train, shell=True)
     
-    
-    #--------------
-    # Launch training with this config
-    cmd_train = "CUDA_VISIBLE_DEVICES={gpu} {python} train.py --model_dir={model_dir} --data_dir={data_dir} --jet_algorithm={algo} --architecture={architecture}".format(gpu=GPU, python=PYTHON, model_dir=model_dir, data_dir=data_dir, algo=algo, architecture=architecture)
-    print(cmd_train)
-    check_call(cmd_train, shell=True)
-    
-    
-    
-# 
-#     # Launch training with this config and restore previous weights
-#     cmd_train = "CUDA_VISIBLE_DEVICES={gpu} {python} train.py --model_dir={model_dir} --data_dir={data_dir}  --restore_file=best --jet_algorithm={algo} --architecture={architecture}".format(gpu=GPU, python=PYTHON, model_dir=model_dir, data_dir=data_dir, algo=algo, architecture=architecture)
-#     print(cmd_train)
-#     check_call(cmd_train, shell=True)
+    else:
+      # Launch training with this config and restore previous weights(use --restore_file=best or --restore_file=last)
+      cmd_train = "CUDA_VISIBLE_DEVICES={gpu} {python} train.py --model_dir={model_dir} --data_dir={data_dir}  --restore_file=best --jet_algorithm={algo} --architecture={architecture}".format(gpu=GPU, python=PYTHON, model_dir=model_dir, data_dir=data_dir, algo=algo, architecture=architecture)
+      print(cmd_train)
+      check_call(cmd_train, shell=True)
+
 
     elapsed_time=time.time()
     print('Training time (minutes) = ',(elapsed_time-start_time)/60)
@@ -279,7 +276,17 @@ if __name__ == "__main__":
 #     multi_scan(learning_rates=[5e-3],decays=[0.9], batch_sizes=[128],num_epochs=[40],hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=9) #gpu1 
 
 
-    multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[40],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=9) #gpu1
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[40],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=9) #gpu1
+
+
+#     multi_scan(learning_rates=[0.0000295],decays=[0.9], batch_sizes=[128],num_epochs=[40],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk_80epochs', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=3) #gpu1
+
+#     multi_scan(learning_rates=[0.0000295],decays=[0.86], batch_sizes=[128],num_epochs=[40],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk_80epochs', info='',sample_name=args.sample_name,Nrun_start=1,Nrun_finish=3) #gpu1
+
+#     multi_scan(learning_rates=[2e-3],decays=[0.86], batch_sizes=[128],num_epochs=[40],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L3WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=1) #gpu2
+
+    multi_scan(learning_rates=[2e-3],decays=[0.86], batch_sizes=[128],num_epochs=[45],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L3WleavesInnerNiNuk_loss', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=9) #gpu2
+
 
 
 
@@ -287,7 +294,7 @@ if __name__ == "__main__":
 
 #-----------------------------------------------------
 # Smaller dataset - tests NiN, etc. We have 120k total training, 40k val and 40 test
-#     multi_scan(learning_rates=[5e-4],decays=[0.9], batch_sizes=[64],num_epochs=[25],hidden_dims=[40], jet_numbers=[120000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=8) #gpu1 
+#     multi_scan(learning_rates=[5e-4],decays=[0.9], batch_sizes=[64],num_epochs=[10],hidden_dims=[40], jet_numbers=[120000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_test', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=1) #gpu1 
 
 # Smaller dataset - tests NiN, etc. We have 120k total training, 40k val and 40 test
 #     multi_scan(learning_rates=[5e-3],decays=[0.9], batch_sizes=[128],num_epochs=[40],hidden_dims=[50], jet_numbers=[120000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L3WleavesInnerNiN', info='',sample_name=args.sample_name,Nrun_start=9,Nrun_finish=12) #gpu1 

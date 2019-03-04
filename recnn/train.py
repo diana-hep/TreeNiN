@@ -122,11 +122,11 @@ def train(model, optimizer, loss_fn, data_iterator, metrics, params, num_steps):
     ##-----------------------------
     # compute mean of all metrics in summary
     metrics_mean = {metric:np.mean([x[metric] for x in summ]) for metric in summ[0]} 
-    metrics_string = " ; ".join("{}: {:05.3f}".format(k, v) for k, v in metrics_mean.items())
+    metrics_string = " ; ".join("{}: {:05.4f}".format(k, v) for k, v in metrics_mean.items())
     logging.info("- Train metrics: " + metrics_string)
 #     print('metrics_mean=',metrics_mean)
 #     print('metrics_string=',metrics_string)
-    
+    return metrics_mean
     
 #-------------------------------------------------------------------------------------------------------------
 def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps):
@@ -198,7 +198,7 @@ def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps):
     ##-----------------------------
     # compute mean of all metrics in summary
     metrics_mean = {metric:np.mean([x[metric] for x in summ]) for metric in summ[0]} 
-    metrics_string = " ; ".join("{}: {:05.3f}".format(k, v) for k, v in metrics_mean.items())
+    metrics_string = " ; ".join("{}: {:05.4f}".format(k, v) for k, v in metrics_mean.items())
     logging.info("- Eval metrics : " + metrics_string)
     return metrics_mean
 
@@ -223,8 +223,12 @@ def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics,
         logging.info("Restoring parameters from {}".format(restore_path))
         utils.load_checkpoint(restore_path, model, optimizer)
         
-    best_val_acc = 0.0
-
+#     best_val_acc = 0.0
+    best_val_acc = np.inf
+    
+    #Save loss history
+    loss_hist={'train_loss':[],'val_loss':[]}
+    
     ##------
     #Create lists to access the lenght below
     train_data=list(train_data)
@@ -261,12 +265,23 @@ def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics,
         logging.info("Epoch {}/{}".format(epoch + 1, params.num_epochs))
       
         # Train one epoch
-        train(model, optimizer, loss_fn, train_loader, metrics, params, num_steps_train)
+        train_metrics = train(model, optimizer, loss_fn, train_loader, metrics, params, num_steps_train)
             
         # Evaluate for one epoch on validation set
         val_metrics = evaluate(model, loss_fn, val_loader, metrics, params, num_steps_val)      
-        val_acc = val_metrics['accuracy']
-        is_best = val_acc >= best_val_acc
+
+          # Minimize the accuracy on the val set  
+#         val_acc = val_metrics['accuracy']
+#         is_best = val_acc >= best_val_acc
+        
+        # Minimize the loss on the val set
+        val_acc = val_metrics['loss']
+        is_best = val_acc <= best_val_acc
+        
+        
+        # Save loss history
+        loss_hist['train_loss'].append(train_metrics['loss'])
+        loss_hist['val_loss'].append(val_metrics['loss'])
         
         scheduler.step()
         step_size = step_size * decay
@@ -280,7 +295,8 @@ def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics,
             
         # If best_eval, best_save_path        
         if is_best:
-            logging.info("- Found new best accuracy")
+#             logging.info("- Found new best accuracy")
+            logging.info("- Found new lowest loss")
             best_val_acc = val_acc
             
             # Save best val metrics in a json file in the model directory
@@ -290,6 +306,12 @@ def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics,
         # Save latest val metrics in a json file in the model directory
         last_json_path = os.path.join(model_dir, "metrics_val_last_weights.json")
         utils.save_dict_to_json(val_metrics, last_json_path)
+
+        # Save loss history in a json file in the model directory
+#         print('loss_hist=',loss_hist)
+        loss_hist_json_path = os.path.join(model_dir, "metrics_loss_history.json")
+        utils.save_dict_list_to_json(loss_hist, loss_hist_json_path)    
+
     
 #-------------------------------------------------------------------------------------------------------------
 ###///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -435,13 +457,21 @@ if __name__=='__main__':
     model = net.PredictFromParticleEmbeddingGated(params,make_embedding=net.GRNNTransformGated).cuda() if params.cuda else net.PredictFromParticleEmbeddingGated(params,make_embedding=net.GRNNTransformGated) 
 
   ## c) Leaves/inner different weights -  RecNN 
-  if architecture=='leaves_inner_RecNN': 
+  elif architecture=='leaves_inner_RecNN': 
     model = net.PredictFromParticleEmbeddingLeaves(params,make_embedding=net.GRNNTransformLeaves).cuda() if params.cuda else net.PredictFromParticleEmbeddingLeaves(params,make_embedding=net.GRNNTransformLeaves) 
 
   ##----
   ## d) Network in network (NiN) - Simple RecNN
   elif architecture=='NiNRecNN':
     model = net.PredictFromParticleEmbeddingNiN(params,make_embedding=net.GRNNTransformSimpleNiN).cuda() if params.cuda else net.PredictFromParticleEmbeddingNiN(params,make_embedding=net.GRNNTransformSimpleNiN)  
+
+  ##-----
+  ## e) Network in network (NiN) - Simple RecNN
+  elif architecture=='NiNRecNN2L3W':
+    model = net.PredictFromParticleEmbeddingNiN2L3W(params,make_embedding=net.GRNNTransformSimpleNiN2L3W).cuda() if params.cuda else net.PredictFromParticleEmbeddingNiN2L3W(params,make_embedding=net.GRNNTransformSimpleNiN2L3W)  
+
+
+
 
   ##----------------------------------------------------------------------
   # Output number of parameters of the model

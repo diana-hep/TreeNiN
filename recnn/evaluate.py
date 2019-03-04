@@ -349,13 +349,21 @@ if __name__ == '__main__':
     model = net.PredictFromParticleEmbeddingGated(params,make_embedding=net.GRNNTransformGated).cuda() if params.cuda else net.PredictFromParticleEmbeddingGated(params,make_embedding=net.GRNNTransformGated) 
 
   ## c) Leaves/inner different weights -  RecNN 
-  if architecture=='leaves_inner_RecNN': 
+  elif architecture=='leaves_inner_RecNN': 
     model = net.PredictFromParticleEmbeddingLeaves(params,make_embedding=net.GRNNTransformLeaves).cuda() if params.cuda else net.PredictFromParticleEmbeddingLeaves(params,make_embedding=net.GRNNTransformLeaves) 
   
   ##----
   ## d) Network in network (NiN) - Simple RecNN
   elif architecture=='NiNRecNN':
     model = net.PredictFromParticleEmbeddingNiN(params,make_embedding=net.GRNNTransformSimpleNiN).cuda() if params.cuda else net.PredictFromParticleEmbeddingNiN(params,make_embedding=net.GRNNTransformSimpleNiN)   
+
+
+  ##-----
+  ## e) Network in network (NiN) - Simple RecNN
+  elif architecture=='NiNRecNN2L3W':
+    model = net.PredictFromParticleEmbeddingNiN2L3W(params,make_embedding=net.GRNNTransformSimpleNiN2L3W).cuda() if params.cuda else net.PredictFromParticleEmbeddingNiN2L3W(params,make_embedding=net.GRNNTransformSimpleNiN2L3W)  
+
+
   
   ##----------------------------------------------------------------------
   ## Loss function
