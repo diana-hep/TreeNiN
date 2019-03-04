@@ -41,11 +41,11 @@ jet_algorithm='kt'
 
 #----------------
 # architecture='gatedRecNN'
-architecture='simpleRecNN'
+# architecture='simpleRecNN'
 # architecture = 'leaves_inner_RecNN'
 # architecture = 'NiNRecNN'
-architecture = 'NiNRecNN2L3W'
-
+# architecture = 'NiNRecNN2L3W'
+architecture = 'NiNgatedRecNN'
 #----------------
 PREPROCESS=False
 # PREPROCESS=True
@@ -55,7 +55,7 @@ TRAIN=True
 
 load_weights=False
 # load_weights=True
-#----------------------------------------------------
+#-----------------------------------------------------
 PYTHON = sys.executable
 parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', default=2,
@@ -285,14 +285,18 @@ if __name__ == "__main__":
 
 #     multi_scan(learning_rates=[2e-3],decays=[0.86], batch_sizes=[128],num_epochs=[40],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L3WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=1) #gpu2
 
-    multi_scan(learning_rates=[2e-3],decays=[0.86], batch_sizes=[128],num_epochs=[45],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L3WleavesInnerNiNuk_loss', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=9) #gpu2
+#     multi_scan(learning_rates=[2e-3],decays=[0.86], batch_sizes=[128],num_epochs=[45],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L3WleavesInnerNiNuk_loss', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=9) #gpu2
+
+
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[45],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L6WleavesInnerNiN_ukh', info='',sample_name=args.sample_name,Nrun_start=3,Nrun_finish=6) #gpu1
+
+    multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[45],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L6WleavesInnerNiN_ukh', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=3) #gpu1
 
 
 
 
 
-
-#-----------------------------------------------------
+#---------------------------------------------------------
 # Smaller dataset - tests NiN, etc. We have 120k total training, 40k val and 40 test
 #     multi_scan(learning_rates=[5e-4],decays=[0.9], batch_sizes=[64],num_epochs=[10],hidden_dims=[40], jet_numbers=[120000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_test', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=1) #gpu1 
 
@@ -310,7 +314,7 @@ if __name__ == "__main__":
 #     multi_scan(learning_rates=[5e-3],decays=[0.9], batch_sizes=[128],num_epochs=[40],hidden_dims=[50], jet_numbers=[120000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=10,Nrun_finish=11) #gpu1 
 
 
-
+#     multi_scan(learning_rates=[5e-3],decays=[0.9], batch_sizes=[128],num_epochs=[5],hidden_dims=[50], jet_numbers=[120000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_test', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=1) #gpu1 
 
 
 

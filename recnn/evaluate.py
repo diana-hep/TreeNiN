@@ -25,6 +25,7 @@ from model import recNet as net
 import utils
 from model import preprocess 
 import model.dataset as dataset
+from scipy import interp
 
 #-------------------------------------------------------------------------------------------------------------
 #/////////////////////    EVALUATION FUNCTIONS     //////////////////////////////////////////////
@@ -198,6 +199,12 @@ def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps, sample_w
         summary_batch['loss'] = loss.item()
         summ.append(summary_batch)
      
+    ##Get the bg rejection at 30% tag eff: 0.05 + 125*(1 - 0.05)/476=0.3). That's why we pick 125
+    fpr_log, tpr_log, thresholds_log = roc_curve(labels, out_prob,pos_label=1, drop_intermediate=False)
+    base_tpr = np.linspace(0.05, 1, 476)
+    inv_fpr = interp(base_tpr, tpr_log, 1. / fpr_log)[125]
+#     print('inv_fpr at 30% tag eff=',inv_fpr)
+     
     ##-----------------------------
     logging.info('Total Labels={}'.format(labels[0:10]))
     logging.info('Out prob={}'.format(out_prob[0:10]))
@@ -218,7 +225,8 @@ def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps, sample_w
     metrics_string = " ; ".join("{}: {:05.5f}".format(k, v) for k, v in metrics_mean.items())
     logging.info("- Eval metrics : " + metrics_string)
     
-    metrics_mean['auc']=roc_auc
+    metrics_mean['auc']=roc_auc    
+    metrics_mean['test_bg_reject']=inv_fpr
     
     return metrics_mean
 
@@ -362,6 +370,11 @@ if __name__ == '__main__':
   ## e) Network in network (NiN) - Simple RecNN
   elif architecture=='NiNRecNN2L3W':
     model = net.PredictFromParticleEmbeddingNiN2L3W(params,make_embedding=net.GRNNTransformSimpleNiN2L3W).cuda() if params.cuda else net.PredictFromParticleEmbeddingNiN2L3W(params,make_embedding=net.GRNNTransformSimpleNiN2L3W)  
+
+  ##-----
+  ## f) Network in network (NiN) - Gated RecNN
+  elif architecture=='NiNgatedRecNN':
+    model = net.PredictFromParticleEmbeddingGatedNiN(params,make_embedding=net.GRNNTransformGatedNiN).cuda() if params.cuda else net.PredictFromParticleEmbeddingGatedNiN(params,make_embedding=net.GRNNTransformGatedNiN) 
 
 
   

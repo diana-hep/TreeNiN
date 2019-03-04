@@ -19,7 +19,8 @@ import model.data_loader as dl
 import model.dataset as dataset
 from model import recNet as net
 from model import preprocess 
-
+from sklearn.metrics import roc_curve, auc
+from scipy import interp
 
 #-------------------------------------------------------------------------------------------------------------
 #/////////////////////    TRAINING AND EVALUATION FUNCTIONS     //////////////////////////////////////////////
@@ -145,6 +146,9 @@ def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps):
 
     # summary for current eval loop
     summ = []
+    
+    output_all=[]
+    labels_all=[]
     ##-----------------------------
     # compute metrics over the dataset
     
@@ -188,6 +192,13 @@ def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps):
         output_batch = output_batch.data.cpu().numpy()
         labels_batch = labels_batch.data.cpu().numpy()
 
+        # Save labels and output prob of the current batch
+        labels_all=np.concatenate((labels_all,labels_batch))        
+        output_all=np.concatenate((output_all,output_batch))
+
+
+
+
         # compute all metrics on this batch
         summary_batch = {metric: metrics[metric](output_batch, labels_batch)
                          for metric in metrics}
@@ -196,11 +207,18 @@ def evaluate(model, loss_fn, data_iterator, metrics, params, num_steps):
         summ.append(summary_batch)
         
     ##-----------------------------
+    
+    ##Get the bg rejection at 30% tag eff: 0.05 + 125*(1 - 0.05)/476=0.3). That's why we pick 125
+    fpr, tpr, thresholds = roc_curve(labels_all, output_all,pos_label=1, drop_intermediate=False)
+    base_tpr = np.linspace(0.05, 1, 476)
+    inv_fpr = interp(base_tpr, tpr, 1. / fpr)[125]
+#     print('inv_fpr at 30% tag eff=',inv_fpr)
+    
     # compute mean of all metrics in summary
     metrics_mean = {metric:np.mean([x[metric] for x in summ]) for metric in summ[0]} 
     metrics_string = " ; ".join("{}: {:05.4f}".format(k, v) for k, v in metrics_mean.items())
     logging.info("- Eval metrics : " + metrics_string)
-    return metrics_mean
+    return metrics_mean, inv_fpr
 
 
 #-------------------------------------------------------------------------------------------------------------
@@ -223,11 +241,11 @@ def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics,
         logging.info("Restoring parameters from {}".format(restore_path))
         utils.load_checkpoint(restore_path, model, optimizer)
         
-#     best_val_acc = 0.0
-    best_val_acc = np.inf
+    best_val_acc = 0.0
+#     best_val_acc = np.inf
     
-    #Save loss history
-    loss_hist={'train_loss':[],'val_loss':[]}
+    #Save loss, accuracy history
+    history={'train_loss':[],'val_loss':[],'train_accuracy':[],'val_accuracy':[],'val_bg_reject':[]}
     
     ##------
     #Create lists to access the lenght below
@@ -268,20 +286,28 @@ def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics,
         train_metrics = train(model, optimizer, loss_fn, train_loader, metrics, params, num_steps_train)
             
         # Evaluate for one epoch on validation set
-        val_metrics = evaluate(model, loss_fn, val_loader, metrics, params, num_steps_val)      
+        val_metrics, inv_fpr = evaluate(model, loss_fn, val_loader, metrics, params, num_steps_val)      
 
           # Minimize the accuracy on the val set  
 #         val_acc = val_metrics['accuracy']
 #         is_best = val_acc >= best_val_acc
+
+#         
+#         # Minimize the loss on the val set
+#         val_acc = val_metrics['loss']
+#         is_best = val_acc <= best_val_acc
         
-        # Minimize the loss on the val set
-        val_acc = val_metrics['loss']
-        is_best = val_acc <= best_val_acc
         
+        # Maximize the bg rejection at 30% tag eff on the val set
+        val_acc = inv_fpr
+        is_best = val_acc >= best_val_acc
         
-        # Save loss history
-        loss_hist['train_loss'].append(train_metrics['loss'])
-        loss_hist['val_loss'].append(val_metrics['loss'])
+        # Save history
+        history['train_loss'].append(train_metrics['loss'])
+        history['val_loss'].append(val_metrics['loss'])
+        history['train_accuracy'].append(train_metrics['accuracy'])
+        history['val_accuracy'].append(val_metrics['accuracy'])
+        history['val_bg_reject'].append(inv_fpr)
         
         scheduler.step()
         step_size = step_size * decay
@@ -296,8 +322,9 @@ def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics,
         # If best_eval, best_save_path        
         if is_best:
 #             logging.info("- Found new best accuracy")
-            logging.info("- Found new lowest loss")
+#             logging.info("- Found new lowest loss")
             best_val_acc = val_acc
+            logging.info('- Found new best bg rejection = {}'.format(best_val_acc))
             
             # Save best val metrics in a json file in the model directory
             best_json_path = os.path.join(model_dir, "metrics_val_best_weights.json")
@@ -309,8 +336,8 @@ def train_and_evaluate(model, train_data, val_data, optimizer, loss_fn, metrics,
 
         # Save loss history in a json file in the model directory
 #         print('loss_hist=',loss_hist)
-        loss_hist_json_path = os.path.join(model_dir, "metrics_loss_history.json")
-        utils.save_dict_list_to_json(loss_hist, loss_hist_json_path)    
+        hist_json_path = os.path.join(model_dir, "metrics_history.json")
+        utils.save_dict_list_to_json(history, hist_json_path)    
 
     
 #-------------------------------------------------------------------------------------------------------------
@@ -470,7 +497,10 @@ if __name__=='__main__':
   elif architecture=='NiNRecNN2L3W':
     model = net.PredictFromParticleEmbeddingNiN2L3W(params,make_embedding=net.GRNNTransformSimpleNiN2L3W).cuda() if params.cuda else net.PredictFromParticleEmbeddingNiN2L3W(params,make_embedding=net.GRNNTransformSimpleNiN2L3W)  
 
-
+  ##-----
+  ## f) Network in network (NiN) - Gated RecNN
+  elif architecture=='NiNgatedRecNN':
+    model = net.PredictFromParticleEmbeddingGatedNiN(params,make_embedding=net.GRNNTransformGatedNiN).cuda() if params.cuda else net.PredictFromParticleEmbeddingGatedNiN(params,make_embedding=net.GRNNTransformGatedNiN) 
 
 
   ##----------------------------------------------------------------------
