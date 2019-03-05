@@ -1,5 +1,5 @@
 
-
+[![DOI](https://zenodo.org/badge/160135404.svg)](https://zenodo.org/badge/latestdoi/160135404)
 
 RECURSIVE NEURAL NETWORK FOR JET PHYSICS 
 PyTorch GPU batch training implementation of G. Louppe, K. Cho, C. Becot and K. Cranmer (arXiv:1702.00748)
