@@ -20,9 +20,16 @@ Results are obtained from a PyTorch implementation to do GPU batch training of a
 
 ## Getting started
 
+A description and link to a full dataset (provided by Gregor Kasieczka, Michael Russel and Tilman Plehn) can be found [here](https://docs.google.com/document/d/1Hcuc6LBxZNX16zjEGeq16DAzspkDC4nDTyjMp1bWHRo/edit)
+with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6). This dataset contains 1.2M training events, 400k validation events, 400k test events with equal numbers of top quark and qcd jets.
+
+
+
+1. Create the directories `in_data` and `out_data` in [top_reference_dataset](top_reference_dataset) and upload the dataset to `in_data` 
+
 ### Package structure
-=================================================================================================
-data  (only test samples are provided)
+
+`data` dir  
  
 - inputTress: All the raw data with the jet clustering history
 - input_batches_pad: Batches of input data for the RecNN
@@ -102,11 +109,11 @@ If you use this package, please cite this code as
 
 ```
 @misc{RecNN,
-author         = "Macaluso, Sebastian and Cranmer, Kyle",
-title          = "{Recursive neural network for jet physics}",
-note            = "{DOI: 10.5281/zenodo.2582216}",
-year       = {2019},
-url            = {https://github.com/SebastianMacaluso/RecNN_PyTorch}
+author       = "Macaluso, Sebastian and Cranmer, Kyle",
+title        = "{Recursive neural network for jet physics}",
+note         = "{DOI: 10.5281/zenodo.2582216}",
+year         = {2019},
+url          = {https://github.com/SebastianMacaluso/RecNN_PyTorch}
 }
 ```
 
