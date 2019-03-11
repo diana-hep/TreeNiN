@@ -5,30 +5,22 @@
 
 **Sebastian Macaluso and Kyle Cranmer**
 
+
 Note that this is an early development version. 
 
 ## Introduction
 
-In this method, a recursive neural network (RecNN) is trained on jet trees. The RecNN provides a ``jet embedding", which maps a set of 4-momenta into a vector of fixed size and can be trained together with a successive network used for classification or regression  (see Louppe et. al [arXiv:1702.00748](https://arxiv.org/abs/1702.00748) for more details). Jet constituents are reclustered to form binary trees, and the topology is determined by the clustering algorithm (e.g. $k_t$, anti-$k_t$ or Cambridge/Aachen). 
-<img src="https://latex.codecogs.com/gif.latex?O_t=\text { Onset event at time bin } t " /> 
-
-For this paper, we chose the $k_t$ clustering algorithm, and 7 features for the nodes: $|p|$, $\eta$, $\phi$, $E$, $E/E_{\text{jet}}$, $p_\text{T}$ and $\theta$. 
+In this method, a recursive neural network (RecNN) is trained on jet trees. The RecNN provides a ``jet embedding", which maps a set of 4-momenta into a vector of fixed size and can be trained together with a successive network used for classification or regression  (see [Louppe et. al. 2017, "QCD-Aware Recursive Neural Networks for Jet Physics"](https://arxiv.org/abs/1702.00748) for more details). Jet constituents are reclustered to form binary trees, and the topology is determined by the clustering algorithm (e.g. kt, anti-kt or Cambridge/Aachen). We chose the kt clustering algorithm, and 7 features for the nodes: |p|, eta, phi, E, E/Ejet, pT and theta. 
 We removed the median and scaled each feature according to the range between the first and the third quartiles (this scaling is robust to outliers).
 
-To make training fast enough, a special batching
-was implemented in \cite{Louppe:2017ipp}. Jets are reorganized by levels (e.g. the root node of each tree in the batch is added at level zero, their children at level one, etc). Each level is restructured so that all internal nodes come first, followed by outer nodes (leaves), and zero padding is applied when necessary.
+To make training fast enough, a special batching was implemented in [Louppe et. al. 2017]. Jets are reorganized by levels (e.g. the root node of each tree in the batch is added at level zero, their children at level one, etc). Each level is restructured so that all internal nodes come first, followed by outer nodes (leaves), and zero padding is applied when necessary.
+
+Results are obtained from a PyTorch implementation to do GPU batch training of a Network in Network RecNN (NiN RecNN). The NiN RecNN is a modification of the simple RecNN architecture introduced in [Louppe et. al. 2017], where we add fully connected layers at each node of the binary tree before moving forward to the next level. In particular, we added 2 NiN layers with ReLU activations. Also, we split weights between internal nodes and leaves, both for the NiN layers and for the convolution of the 7 input features of each node. Finally, we introduce two sets of independent weights for the NiN layers of the left and right children of the root node. Our model has 62,651 trainable parameters. Training is performed over 40 epochs with a minibatch of 128 and a learning rate of 0.002 (decayed by a factor of 0.9 after every epoch), using the cross entropy loss function and Adam as the optimizer. 
 
 
-Results are obtained from a PyTorch implementation to do GPU batch training of a Network in Network RecNN (NiN RecNN). The NiN RecNN is a modification of the simple RecNN architecture introduced in \cite{Louppe:2017ipp}, where we add fully connected layers at each node of the binary tree before moving forward to the next level. In particular, we added 2 NiN layers with ReLU activations. Also, we split weights between internal nodes and leaves, both for the NiN layers and for the convolution of the 7 input features of each node. Finally, we introduce two sets of independent weights for the NiN layers of the left and right children of the root node. Our model has 62,651 trainable parameters. The code is publicly accessible on GitHub \cite{RecNN}.
-Training is performed over 40 epochs with a minibatch of 128 and a learning rate of $2\,$x$\,10^{-3}$ (decayed by a factor of 0.9 after every epoch), using the cross entropy loss function and Adam as the optimizer. 
+## Getting started
 
-
-
-PyTorch GPU batch training implementation of G. Louppe, K. Cho, C. Becot and K. Cranmer (arXiv:1702.00748)
-
-Sebastian Macaluso - Dic 2, 2018
-
-
+### Package structure
 =================================================================================================
 data  (only test samples are provided)
  
@@ -99,4 +91,39 @@ utils.py: auxiliary functions for training, logging, loading hyperparameters fro
 synthesize_results.py: Aggregate metrics of all experiments and outputs a file located at “experiments/dir_name” with a  list where they are sorted. Currently sorts based on best ROC auc.
 
 To run: python synthesize_results.py
+
+## Acknowledgements
+
+SM gratefully acknowledges the support of NVIDIA Corporation with the donation of a Titan V GPU used for this research.
+
+## References
+
+If you use MadMiner, please cite this code as
+
+@misc{RecNN,
+author         = "Macaluso, Sebastian and Cranmer, Kyle",
+title          = "{Recursive neural network for jet physics}",
+note            = "{DOI: 10.5281/zenodo.2582216}",
+year       = {2019},
+url            = {https://github.com/SebastianMacaluso/RecNN_PyTorch}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
