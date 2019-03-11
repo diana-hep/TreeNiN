@@ -98,8 +98,9 @@ SM gratefully acknowledges the support of NVIDIA Corporation with the donation o
 
 ## References
 
-If you use MadMiner, please cite this code as
+If you use this package, please cite this code as
 
+```
 @misc{RecNN,
 author         = "Macaluso, Sebastian and Cranmer, Kyle",
 title          = "{Recursive neural network for jet physics}",
@@ -107,7 +108,7 @@ note            = "{DOI: 10.5281/zenodo.2582216}",
 year       = {2019},
 url            = {https://github.com/SebastianMacaluso/RecNN_PyTorch}
 }
-
+```
 
 
 
