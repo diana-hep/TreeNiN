@@ -1,11 +1,17 @@
 
 [![DOI](https://zenodo.org/badge/160135404.svg)](https://zenodo.org/badge/latestdoi/160135404)
 
-RECURSIVE NEURAL NETWORK FOR JET PHYSICS 
+# Recursive Neural Network for Jet Physics
 
+**Sebastian Macaluso and Kyle Cranmer**
 
-In this method, a recursive neural network (RecNN) is trained on jet trees. The RecNN provides a ``jet embedding", which maps a set of 4-momenta into a vector of fixed size and can be trained together with a successive network used for classification or regression  (see \cite{Louppe:2017ipp} for more details). 
-Jet constituents of the reference sample are reclustered to form binary trees, and the topology is determined by the clustering algorithm (e.g. $k_t$, anti-$k_t$ or Cambridge/Aachen). 
+Note that this is an early development version. 
+
+## Introduction
+
+In this method, a recursive neural network (RecNN) is trained on jet trees. The RecNN provides a ``jet embedding", which maps a set of 4-momenta into a vector of fixed size and can be trained together with a successive network used for classification or regression  (see Louppe et. al [arXiv:1702.00748](https://arxiv.org/abs/1702.00748) for more details). Jet constituents are reclustered to form binary trees, and the topology is determined by the clustering algorithm (e.g. $k_t$, anti-$k_t$ or Cambridge/Aachen). 
+<img src="https://latex.codecogs.com/gif.latex?O_t=\text { Onset event at time bin } t " /> 
+
 For this paper, we chose the $k_t$ clustering algorithm, and 7 features for the nodes: $|p|$, $\eta$, $\phi$, $E$, $E/E_{\text{jet}}$, $p_\text{T}$ and $\theta$. 
 We removed the median and scaled each feature according to the range between the first and the third quartiles (this scaling is robust to outliers).
 
