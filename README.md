@@ -2,6 +2,22 @@
 [![DOI](https://zenodo.org/badge/160135404.svg)](https://zenodo.org/badge/latestdoi/160135404)
 
 RECURSIVE NEURAL NETWORK FOR JET PHYSICS 
+
+
+In this method, a recursive neural network (RecNN) is trained on jet trees. The RecNN provides a ``jet embedding", which maps a set of 4-momenta into a vector of fixed size and can be trained together with a successive network used for classification or regression  (see \cite{Louppe:2017ipp} for more details). 
+Jet constituents of the reference sample are reclustered to form binary trees, and the topology is determined by the clustering algorithm (e.g. $k_t$, anti-$k_t$ or Cambridge/Aachen). 
+For this paper, we chose the $k_t$ clustering algorithm, and 7 features for the nodes: $|p|$, $\eta$, $\phi$, $E$, $E/E_{\text{jet}}$, $p_\text{T}$ and $\theta$. 
+We removed the median and scaled each feature according to the range between the first and the third quartiles (this scaling is robust to outliers).
+
+To make training fast enough, a special batching
+was implemented in \cite{Louppe:2017ipp}. Jets are reorganized by levels (e.g. the root node of each tree in the batch is added at level zero, their children at level one, etc). Each level is restructured so that all internal nodes come first, followed by outer nodes (leaves), and zero padding is applied when necessary.
+
+
+Results are obtained from a PyTorch implementation to do GPU batch training of a Network in Network RecNN (NiN RecNN). The NiN RecNN is a modification of the simple RecNN architecture introduced in \cite{Louppe:2017ipp}, where we add fully connected layers at each node of the binary tree before moving forward to the next level. In particular, we added 2 NiN layers with ReLU activations. Also, we split weights between internal nodes and leaves, both for the NiN layers and for the convolution of the 7 input features of each node. Finally, we introduce two sets of independent weights for the NiN layers of the left and right children of the root node. Our model has 62,651 trainable parameters. The code is publicly accessible on GitHub \cite{RecNN}.
+Training is performed over 40 epochs with a minibatch of 128 and a learning rate of $2\,$x$\,10^{-3}$ (decayed by a factor of 0.9 after every epoch), using the cross entropy loss function and Adam as the optimizer. 
+
+
+
 PyTorch GPU batch training implementation of G. Louppe, K. Cho, C. Becot and K. Cranmer (arXiv:1702.00748)
 
 Sebastian Macaluso - Dic 2, 2018
