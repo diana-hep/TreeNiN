@@ -60,7 +60,7 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
 
 - [`search_hyperparams.py`](recnn/search_hyperparams.py): main script that calls preprocess_main.py, train.py and evaluate.py; and runs hyperparameters searches.
     - Parameters to specify before running:
-        - multi_scan function arguments, e.g.:
+        - multi_scan function arguments. Determine the hyperparameter values (for a scan input a list of values), *dir_name* and *number of runs=Nrun_finish-Nrun_start*.
             ```
             multi_scan(learning_rates=[5e-4],
                        decays=[0.92], 
@@ -119,9 +119,9 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
  -------------------------------------------------------------------------
  ### Running the TreeNiN 
  
- 1. Set the flag *PREPROCESS=True* and the other ones to False in  `search_hyperparams.py` (This will run `preprocess_main.py` and save the preprocessed in [`../data/preprocessed_trees/`](../data/preprocessed_trees/)). Run `search_hyperparams.py`.
+ 1. Set the flag *PREPROCESS=True* and the other ones to *False* in  `search_hyperparams.py` (This will run `preprocess_main.py` and save the preprocessed data in [`../data/preprocessed_trees/`](../data/preprocessed_trees/)). Specify the *multi_scan function* arguments and run `search_hyperparams.py`. Note: this needs to be run once only, so set  *Nrun_start=0,Nrun_finish=1* in *multi_scan function*.
  
- 3. Set the flag *TRAIN_and_EVALUATE=True* and the other ones to False in  `search_hyperparams.py` (This will run `train.py` and `evaluate.py`). Specify the *multi_scan function* arguments and run `search_hyperparams.py`. Results will be saved in `experiments/[dir_name]`.
+ 3. Set the flag *TRAIN_and_EVALUATE=True* and the other ones to *False* in  `search_hyperparams.py` (This will run `train.py` and `evaluate.py`). Specify the *multi_scan function* arguments and run `search_hyperparams.py`. Results will be saved in `experiments/[dir_name]`.
 
 
 ## Acknowledgements
