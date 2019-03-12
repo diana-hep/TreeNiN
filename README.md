@@ -53,7 +53,9 @@ To run:
  - `search_hyperparams.py`: main script that calls preprocess_main.py, train.py and evaluate.py, and runs hyperparameters searches.
     - Parameters to specify before running:
         - multi_scan function arguments, e.g.:
-     ```multi_scan(learning_rates=[5e-4],decays=[0.92], batch_sizes=[64], num_epochs=[40], hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7, dir_name='top_tag_reference_dataset', name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=9) ```
+            ```
+            multi_scan(learning_rates=[5e-4],decays=[0.92], batch_sizes=[64], num_epochs=[40], hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7, dir_name='top_tag_reference_dataset', name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=9) 
+            ```
         - Flags: *PREPROCESS*, *TRAIN_and_EVALUATE*, *EVALUATE*
  
     - To run:
@@ -66,28 +68,27 @@ To run:
  
 - `evaluate.py`: loads the weights that give the best val accuracy and gets the accuracy, tpr, fpr, and ROC auc over the test set.
  
- -------------------------------------------------------------------------
- -`model/recNet.py`: model architecture for batch training and accuracy function.
+ - ['model'](model/):
  
- -`model/data_loader.py`: load the raw data and create the batches:
+    -`recNet.py`: model architecture for batch training and accuracy function.
  
- - Load the jet events and make the trees.
- - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.
- - Load the jet trees, reorganize the tree by levels, create a batch of N jets by appending the nodes of each jet to each level and add zero padding so that all the levels have the same size
- - Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline
+    -`model/data_loader.py`: load the raw data and create the batches:
+        - Load the jet events and make the trees.
+        - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.
+        - Load the jet trees, reorganize the tree by levels, create a batch of N jets by appending the nodes of each jet to each level and add zero padding so that all the levels have the same size
+        - Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline
  
  
- -`model/preprocess.py`: rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
+    -`model/preprocess.py`: rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
  
- - `model/dataset.py`:
+    - `model/dataset.py`:
  
--------------------------------------------------------------------------
- - `experiments/template_params.json`:  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
+ -[`experiments`](experiments):
+    - `experiments/template_params.json`:  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
  
- - `experiments/dir_name`: dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture
- 
- -------------------------------------------------------------------------
- utils.py: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
+    - `experiments/dir_name`: dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture
+
+ -`utils.py`: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
  
  -------------------------------------------------------------------------
  #### Running the TreeNiN 
