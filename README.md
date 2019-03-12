@@ -68,27 +68,29 @@ To run:
  
 - `evaluate.py`: loads the weights that give the best val accuracy and gets the accuracy, tpr, fpr, and ROC auc over the test set.
  
- - ['model'](model/):
+ - [`model`](model/):
  
-    -`recNet.py`: model architecture for batch training and accuracy function.
+    - `recNet.py`: model architecture for batch training and accuracy function.
  
-    -`model/data_loader.py`: load the raw data and create the batches:
+    - `model/data_loader.py`: load the raw data and create the batches:
+    
         - Load the jet events and make the trees.
         - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.
         - Load the jet trees, reorganize the tree by levels, create a batch of N jets by appending the nodes of each jet to each level and add zero padding so that all the levels have the same size
         - Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline
  
  
-    -`model/preprocess.py`: rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
+    - `preprocess.py`: rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
  
-    - `model/dataset.py`:
+    - `dataset.py`:
  
- -[`experiments`](experiments):
-    - `experiments/template_params.json`:  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
+-[`experiments`](experiments):
  
-    - `experiments/dir_name`: dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture
+   - `template_params.json`:  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
+ 
+   - `experiments/dir_name`: dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture
 
- -`utils.py`: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
+-`utils.py`: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
  
  -------------------------------------------------------------------------
  #### Running the TreeNiN 
