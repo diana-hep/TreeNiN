@@ -1,6 +1,9 @@
 
 [![DOI](https://zenodo.org/badge/160135404.svg)](https://zenodo.org/badge/latestdoi/160135404)
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 # Tree Network in Network (TreeNiN) for Jet Physics
 
 **Sebastian Macaluso and Kyle Cranmer**
@@ -81,7 +84,7 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
         - Flags: *PREPROCESS*, *TRAIN_and_EVALUATE*, *EVALUATE*
  
     - To run:
-        python search_hyperparams.py --gpu=0
+        *python search_hyperparams.py --gpu=0*
      
  - `preprocess_main.py`: Preprocess the jet dictionaries and go from the jet constituents 4-momentum vectors to the 7 features for the nodes (|p|, eta, phi, E, E/Ejet, pT and theta).
  
@@ -94,7 +97,7 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
  
     - `recNet.py`: model architecture for batch training and accuracy function.
  
-    - `model/data_loader.py`: load the raw data and create the batches:
+    - `data_loader.py`: load the raw data and create the batches:
     
         - Load the jet events and make the trees.
         - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.
@@ -104,21 +107,26 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
  
     - `preprocess.py`: rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
  
-    - `dataset.py`:
+    - `dataset.py`: This script defines:
+        - A new subclass of torch.utils.data.Dataset that overrides the *__len__*  and *__getitem__* methods. This allows to call torch.utils.data.DataLoader to generate the batches in parallel with num_workers>1 and speed up the code. 
+        - A customized *collate* function to load the batches with torch.utils.data.DataLoader.
  
 -[`experiments`](experiments):
  
    - `template_params.json`:  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
  
-   - `experiments/dir_name`: dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture
+ - `experiments/[dir_name]`: dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture. For each run, a new directory will be created with files saving the output probabilities on the test set, metrics history after each epoch, best and last weights, etc.
+ 
+ -`jet_study.ipynb`: Load results from `experiments/[dir_name]`, and get statistics for single and/or multiple runs.
 
 -`utils.py`: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
  
  -------------------------------------------------------------------------
  ### Running the TreeNiN 
  
- 1. Set the flag *PREPROCESS=True* and the other ones to False in  `search_hyperparams.py`. This will run `preprocess_main.py` and save the preprocessed in ['../data/preprocessed_trees/`](../data/preprocessed_trees/)
- 2. Set the flag *TRAIN_and_EVALUATE=True* and the other ones to False in  `search_hyperparams.py`. Specify how many runs to do in the *multi_scan* function.
+ 1. Set the flag *PREPROCESS=True* and the other ones to False in  `search_hyperparams.py` (This will run `preprocess_main.py` and save the preprocessed in [`../data/preprocessed_trees/`](../data/preprocessed_trees/)). Run `search_hyperparams.py`.
+ 
+ 3. Set the flag *TRAIN_and_EVALUATE=True* and the other ones to False in  `search_hyperparams.py` (This will run `train.py` and `evaluate.py`). Specify the *multi_scan function* arguments and run `search_hyperparams.py`. Results will be saved in `experiments/[dir_name]`.
 
 
 ## Acknowledgements
