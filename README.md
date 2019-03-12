@@ -34,20 +34,20 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
 
 ### Data pipeline structure in [`top_reference_dataset`](top_reference_dataset):
 
--`Read_data.ipynb`: Load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
+-[`Read_data.ipynb`](top_reference_dataset/Read_data.ipynb): Load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
 
--`toptag_reference_dataset_Tree.py`: Load and recluster the jet constituents. Create binary trees with the clustering history of the jets and output a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta, phi (also charge, muon ID, etc depending on the information contained in the dataset). Auxiliary scripts that are called:
+-[`toptag_reference_dataset_Tree.py`](top_reference_dataset/toptag_reference_dataset_Tree.py): Load and recluster the jet constituents. Create binary trees with the clustering history of the jets and output a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta, phi (also charge, muon ID, etc depending on the information contained in the dataset). Auxiliary scripts that are called:
 
-   - `analysis_functions.py`: auxiliary functions. 
-   - `preprocess_functions.py`: auxiliary functions. 
-   - `tree_cluster_hist.py`: Create binary trees. If the dataset has more information besides the jet constituents 4-vectors (e.g. charge, muon ID, etc), this script runs a recursive function that traverses the tree down to the leaves and then goes back to the root generating the inner nodes values by adding the children values for the extra information.
-   - `jet_image_trim_pt800-900_card.dat`: parameters card with kinematic variables values, clustering algorithm choice, etc. Currently not used.
+   - [`analysis_functions.py`](top_reference_dataset/analysis_functions.py): auxiliary functions. 
+   - [`preprocess_functions.py`](top_reference_dataset/preprocess_functions.py): auxiliary functions. 
+   - [`tree_cluster_hist.py`](top_reference_dataset/tree_cluster_hist.py): Create binary trees. If the dataset has more information besides the jet constituents 4-vectors (e.g. charge, muon ID, etc), this script runs a recursive function that traverses the tree down to the leaves and then goes back to the root generating the inner nodes values by adding the children values for the extra information.
+   - [`jet_image_trim_pt800-900_card.dat`](top_reference_dataset/jet_image_trim_pt800-900_card.dat): parameters card with kinematic variables values, clustering algorithm choice, etc. Currently not used.
 
 
 ### Running the data pipeline
 
 1.  Go to [`top_reference_dataset`](top_reference_dataset) dir. Upload the dataset to [`in_data`](top_reference_dataset/in_data) 
-2. Run the `h5_to_npy` function in `Read_data.ipynb` to load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
+2. Run the `h5_to_npy` function in [`Read_data.ipynb`](top_reference_dataset/Read_data.ipynb) to load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in [`out_data`](top_reference_dataset/out_data).
 
 3. Run:
 
@@ -85,18 +85,18 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
     - To run:
         *python search_hyperparams.py --gpu=0*
      
- - `preprocess_main.py`: Preprocess the jet dictionaries and go from the jet constituents 4-momentum vectors to the 7 features for the nodes (|p|, eta, phi, E, E/Ejet, pT and theta).
+ - [`preprocess_main.py`](recnn/preprocess_main.py): Preprocess the jet dictionaries and go from the jet constituents 4-momentum vectors to the 7 features for the nodes (|p|, eta, phi, E, E/Ejet, pT and theta).
  
  
- - `train.py`: Train the model. This file calls `model/recNet.py`, `model/data_loader.py`, `model/preprocess.py`, `model/dataset.py` and `utils.py`
+ - [`train.py`](recnn/train.py): Train the model. This file calls `model/recNet.py`, `model/data_loader.py`, `model/preprocess.py`, `model/dataset.py` and `utils.py`
  
-- `evaluate.py`: loads the weights that give the best val accuracy and gets the accuracy, tpr, fpr, and ROC auc over the test set.
+- [`evaluate.py`](recnn/evaluate.py): loads the weights that give the best val accuracy and gets the accuracy, tpr, fpr, and ROC auc over the test set.
  
  - [`model`](model/):
  
-    - `recNet.py`: model architecture for batch training and accuracy function.
+    - [`recNet.py`](recnn/model/recNet.py): model architecture for batch training and accuracy function.
  
-    - `data_loader.py`: load the raw data and create the batches:
+    - [`data_loader.py`](recnn/model/data_loader.py): load the raw data and create the batches:
     
         - Load the jet events and make the trees.
         - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.
@@ -104,21 +104,21 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
         - Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline
  
  
-    - `preprocess.py`: rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
+    - [`preprocess.py`](recnn/model/preprocess.py): rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
  
-    - `dataset.py`: This script defines:
+    - [`dataset.py`](recnn/model/dataset.py): This script defines:
         - A new subclass of torch.utils.data.Dataset that overrides the *__len__*  and *__getitem__* methods. This allows to call torch.utils.data.DataLoader to generate the batches in parallel with num_workers>1 and speed up the code. 
         - A customized *collate* function to load the batches with torch.utils.data.DataLoader.
  
 -[`experiments`](experiments):
  
-   - `template_params.json`:  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
+   - [`template_params.json`](recnn/experiments/template_params.json):  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
  
- - `experiments/[dir_name]`: dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture. For each run, a new directory will be created with files saving the output probabilities on the test set, metrics history after each epoch, best and last weights, etc.
+ - [`experiments/[dir_name]`](recnn/experiments/jet_study.ipynb): dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture. For each run, a new directory will be created with files saving the output probabilities on the test set, metrics history after each epoch, best and last weights, etc.
  
- -`jet_study.ipynb`: Load results from `experiments/[dir_name]`, and get statistics for single and/or multiple runs.
+ -[`jet_study.ipynb`](recnn/experiments/jet_study.ipynb): Load results from `experiments/[dir_name]`, and get statistics for single and/or multiple runs.
 
--`utils.py`: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
+-[`utils.py`](recnn/utils.py): auxiliary functions for training, logging, loading hyperparameters from json file, etc.
  
  -------------------------------------------------------------------------
  ### Running the TreeNiN 
