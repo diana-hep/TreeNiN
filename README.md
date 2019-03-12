@@ -10,11 +10,11 @@ Note that this is an early development version.
 
 ## Introduction
 
-In this method, a recursive neural network (RecNN) is trained on jet trees. The RecNN provides a ``jet embedding", which maps a set of 4-momenta into a vector of fixed size and can be trained together with a successive network used for classification or regression  (see [Louppe et. al. 2017, "QCD-Aware Recursive Neural Networks for Jet Physics"](https://arxiv.org/abs/1702.00748) for more details). Jet constituents are reclustered to form binary trees, and the topology is determined by the clustering algorithm (e.g. kt, anti-kt or Cambridge/Aachen). We chose the kt clustering algorithm, and 7 features for the nodes: |p|, eta, phi, E, E/Ejet, pT and theta. We scaled each feature with the scikit-learn preprocessing method RobustScaler (this scaling is robust to outliers).
+In this method, a tree neural network (TreeNN) is trained on jet trees. The TreeNN provides a ``jet embedding", which maps a set of 4-momenta into a vector of fixed size and can be trained together with a successive network used for classification or regression  (see [Louppe et. al. 2017, "QCD-Aware Recursive Neural Networks for Jet Physics"](https://arxiv.org/abs/1702.00748) for more details). Jet constituents are reclustered to form binary trees, and the topology is determined by the clustering algorithm (e.g. kt, anti-kt or Cambridge/Aachen). We chose the kt clustering algorithm, and 7 features for the nodes: |p|, eta, phi, E, E/Ejet, pT and theta. We scaled each feature with the scikit-learn preprocessing method RobustScaler (this scaling is robust to outliers).
 
 To speed up the training, a special batching was implemented in [Louppe et. al. 2017]. Jets are reorganized by levels (e.g. the root node of each tree in the batch is added at level zero, their children at level one, etc). Each level is restructured so that all internal nodes come first, followed by outer nodes (leaves), and zero padding is applied when necessary. Results are obtained from a PyTorch implementation to provide GPU acceleration.
 
-We introduced a Network in Network generalization of the simple RecNN architecture introduced in [Louppe et. al. 2017], where we add fully connected layers at each node of the binary tree before moving forward to the next level. We refer to this model as TreeNiN. In particular, we add 2 NiN layers with ReLU activations. Also, we split weights between internal nodes and leaves, both for the NiN layers and for the initial embedding of the 7 input features of each node. Finally, we introduce two sets of independent weights for the NiN layers of the left and right children of the root node. Our model has 62,651 trainable parameters. Training is performed over 40 epochs with a minibatch of 128 and a learning rate of 0.002 (decayed by a factor of 0.9 after every epoch), using the cross entropy loss function and Adam as the optimizer. 
+We introduced a Network in Network generalization of the simple TreeNN architecture introduced in [Louppe et. al. 2017], where we add fully connected layers at each node of the binary tree before moving forward to the next level. We refer to this model as TreeNiN. In particular, we add 2 NiN layers with ReLU activations. Also, we split weights between internal nodes and leaves, both for the NiN layers and for the initial embedding of the 7 input features of each node. Finally, we introduce two sets of independent weights for the NiN layers of the left and right children of the root node. Our model has 62,651 trainable parameters. Training is performed over 40 epochs with a minibatch of 128 and a learning rate of 0.002 (decayed by a factor of 0.9 after every epoch), using the cross entropy loss function and Adam as the optimizer. 
 
 
 ## Getting started
@@ -25,15 +25,15 @@ Make sure the following tools are installed and running:
 
 - Python 2.7, Python 3.6, packages included in [Anaconda](https://www.anaconda.com/) (Numpy, Scipy, scikit-learn, Pandas), [PyROOT](https://root.cern.ch/pyroot), [FastJet](http://fastjet.fr/), [PyTorch](https://pytorch.org/).
 
-### Using this Recursive Neural Network
+### Using the Tree Neural Network
 
 A description and link to a full dataset (provided by Gregor Kasieczka, Michael Russel and Tilman Plehn) can be found [here](https://docs.google.com/document/d/1Hcuc6LBxZNX16zjEGeq16DAzspkDC4nDTyjMp1bWHRo/edit)
 with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6). This dataset contains 1.2M training events, 400k validation events, 400k test events with equal numbers of top quark and qcd jets. Only 4 momentum vectors of the jet constituents.
 
 
 
-1. Upload the dataset to `in_data` 
-2. `Read_data.ipyng`: Run the `h5_to_npy` function to load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
+1.  Go to [`top_reference_dataset`](top_reference_dataset) dir. Upload the dataset to [`in_data`](top_reference_dataset/in_data) 
+2. `Read_data.ipynb`: Run the `h5_to_npy` function to load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
 3. `toptag_reference_dataset_Tree.py`: Loads the jet constituents, reclusters the jet constituents and creates binary trees with the clustering history of the jets and outputs a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta, phi (also charge, muon ID, etc depending on the information contained in the dataset). Auxiliary scripts that are called:
     
     - `analysis_functions.py`
