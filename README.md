@@ -43,7 +43,7 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
 
 To run:
 
-'python2.7 toptag_reference_dataset_Tree.py jet_image_trim_pt800-900_card.dat val top_reference_dataset/out_data/ ../data/inputTrees/top_tag_reference_dataset/'
+*python2.7 toptag_reference_dataset_Tree.py jet_image_trim_pt800-900_card.dat val top_reference_dataset/out_data/ ../data/inputTrees/top_tag_reference_dataset/*
 
 (The output file with the dictionary for each jet will be saved in [`data/inputTrees/top_tag_reference_dataset/`](data/inputTrees/top_tag_reference_dataset/). Also, change val for train or test to get the run the data pipeline over the test and train sets as well.)
 
@@ -54,7 +54,19 @@ To run:
     - Parameters to specify before running:
         - multi_scan function arguments, e.g.:
             ```
-            multi_scan(learning_rates=[5e-4],decays=[0.92], batch_sizes=[64], num_epochs=[40], hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7, dir_name='top_tag_reference_dataset', name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=9) 
+            multi_scan(learning_rates=[5e-4],
+                       decays=[0.92], 
+                       batch_sizes=[64], 
+                       num_epochs=[40], 
+                       hidden_dims=[40], 
+                       jet_numbers=[1200000], 
+                       Nfeatures=7, 
+                       dir_name='top_tag_reference_dataset', 
+                       name=architecture+'_kt_2L4WleavesInnerNiNuk', 
+                       info='',
+                       sample_name=args.sample_name,
+                       Nrun_start=0,
+                       Nrun_finish=9) 
             ```
         - Flags: *PREPROCESS*, *TRAIN_and_EVALUATE*, *EVALUATE*
  
