@@ -6,12 +6,6 @@
 
 ### **Sebastian Macaluso and Kyle Cranmer**
 
-##### **Sebastian Macaluso and Kyle Cranmer**
-
-#### **Sebastian Macaluso and Kyle Cranmer**
-
- **Sebastian Macaluso and Kyle Cranmer**
-
 Note that this is an early development version. 
 
 ## Introduction
