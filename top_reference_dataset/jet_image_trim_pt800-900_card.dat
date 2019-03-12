@@ -1,0 +1,57 @@
+#---------------------------------------------------
+#Comment:0=OFF, 1=ON for merging
+
+PTMIN 800.
+PTMAX 900.
+ETAMAX 1.
+
+MERGE 0
+MATCHDELTAR 0.6
+MERGEDELTAR 0.6
+
+
+#---------------------------------------------------
+#Comment: 0=OFF, 1=ON
+
+TRIMMING 0
+RTRIM 0.3
+MINPTFRACTION 0.05
+
+#---------------------------------------------------
+#Comment: reclustering algorithm
+
+RJET 1.0
+#RJET 0.4
+
+#JETDEF antikt
+JETDEF kt
+#JETDEF CA
+
+#---------------------------------------------------
+#Comment: 
+
+#PREPROCESS rot_norm_vflip_hflip_makeImage_avg
+PREPROCESS rot_norm_vflip_hflip_makeImage
+#PREPROCESS rot_norm_vflip_hflip
+#PREPROCESS none_norm_makeImage
+#PREPROCESS none
+
+#---------------------------------------------------
+#Comment: Images
+
+NPOINTS 38
+DRETA 1.6
+DRPHI 1.6
+NCOLORS 1
+
+#---------------------------------------------------
+#Comment:power for the pT weighted charge variable
+
+KAPPA 0.4
+
+#---------------------------------------------------
+#Comment: make the histograms
+
+MAKEHIST 0
+SAVEHIST 0
+SAVECSV 0

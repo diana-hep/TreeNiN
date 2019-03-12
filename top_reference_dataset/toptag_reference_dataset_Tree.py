@@ -2,17 +2,10 @@
 # USAGE
 
 # ////////////////////////////////////////////////////////
-# RUN with python2.7 instead of just python on the hexfarm
+# RUN with python2.7 
 # ////////////////////////////////////////////////////////
 
-# takes any number of root files as inputs
-# python jet_preprocessTree.py jet_image_trim_pt800-900.card 'tt' file1.root file2.root ... outfile_srting
-# 
-# e.g.
-# python jet_preprocessTree.py jet_image_trim_pt800-900.card 'tt' /het/p4/macaluso/Delphes-3.4.1/test_ttbar_10.root test_10
 
-# Comments:
-# Change filtered_jet accordingly if doing trimming or not
 #------------------------------------------------------------------------------------------
 # Enable python for fastjet
 # [macaluso@hexcms fastjet-3.3.1]$ ./configure --prefix=$PWD/../fastjet-install --enable-pyext
@@ -50,6 +43,12 @@ import ROOT as r
 import json 
 import time
 import pickle
+import ROOT as r
+
+import copy
+# from rootpy.vector import LorentzVector
+# from recnn.preprocessing import _pt
+
 start_time = time.time()
 
 
@@ -57,8 +56,8 @@ start_time = time.time()
 sys.path.append("/het/p4/macaluso/fastjet-install/lib/python2.7/site-packages")
 import fastjet as fj
 
-# import analysis_functions as af
-# import preprocess_functions as pf
+import analysis_functions as af
+import preprocess_functions as pf
 import tree_cluster_hist as cluster_h
 #-----------------------------------------
 plots_dir='plots/'
@@ -102,6 +101,10 @@ dir_subjets= sys.argv[3]
 # dir_subjets='../data/input/test_subjets/'
 out_dir=sys.argv[4]
 
+
+
+rot_boost_rot_flip=True
+# rot_boost_rot_flip=False
 #-------------------------------------------------------------------------------------------------------------
 #Read cardfile
 with open(cardfile) as f:
@@ -158,6 +161,8 @@ for command in commands:
        
 preprocess_cmnd=preprocess_label.split('_')    
 
+
+
 print("ptmin",ptmin)
 print("ptmax",ptmax)
 print("etamax",etamax)
@@ -176,7 +181,20 @@ if not os.path.exists(out_dir):
 
 # 
 # #-------------------------------------------------------------------------------------------------------------
-
+# # List to be filled to get histograms
+# tot_raw_images=[]
+# tot_tracks=[]
+# tot_towers=[]
+# tot_track_tower=[]
+# jet_charge=[]
+# jet_abs_charge=[]
+# tot_ptq=[]
+# tot_abs_ptq=[]
+# tot_muons=[]
+# jet_mass=[]
+# jet_pT=[]
+# jet_phi=[]
+# jet_eta=[]
 
 print('Loading files for subjets')
 print('Subjet array format ([[[pTsubj1],[pTsubj2],...],[[etasubj1],[etasubj2],...],[[phisubj1],[phisubj2],...]])')
@@ -255,6 +273,8 @@ def recluster(particles, Rjet,jetdef_tree):
     tree=np.asarray([np.asarray(e).reshape(-1,2) for e in tree])
     content=np.asarray([content])
     content=np.asarray([np.asarray(e).reshape(-1,4) for e in content])
+    print('Content =',content)
+    
     mass=out_jet[i].m()
     pt=out_jet[i].pt() 
     
@@ -299,12 +319,11 @@ def make_dictionary(tree,content,mass,pt,charge=None,abs_charge=None,muon=None):
 
 
 
-
-
-#-----------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------
+ 
+#----------------------------------------
 counter=0 
 ## Loop over the data
+jet_mass_difference=[]
 
 for ifile in range(N_analysis):
 #    print(myN_jets,Ntotjets)
@@ -329,15 +348,62 @@ for ifile in range(N_analysis):
   #Loop over all the events
   for element in jets_file:
     
-    event=make_pseudojet(element[0])
+    event=pf.make_pseudojet(element[0])
+#     print('Event const=',event)
     label=element[1]
-#     sys.exit()
 #     print('label=',label)
-    
-    jets_tree=recluster(event, 0.8,'kt')
-#     print('jets_tree=',jets_tree)
 
-    for tree, content, mass, pt in recluster(event, 0.8,'kt'):
+    
+    out_jet = pf.recluster(event, 0.8,'kt')  
+#     print('length out_jet =',len(out_jet)) 
+#     print('Jets [m,pT,eta,phi,pz]=',[[subjet.m(),subjet.perp(),subjet.eta(),subjet.phi_std(),subjet.pz()] for subjet in out_jet])
+
+
+    #-----------------------
+    # Keep only the leading jet. Then recluster jets in subjets of R=0.3
+    R_preprocess=0.3
+    subjets = pf.recluster(out_jet[0].constituents(), R_preprocess,'kt') 
+#     print('---'*20)
+#     print('Subjets [mass]=',[subjet.m() for subjet in subjets])
+#     print('Subjets [mass,pT,eta,phi,pz]=',[[subjet.m(),subjet.perp(),subjet.eta(), subjet.phi_std(),subjet.pz()] for subjet in subjets])    
+    
+    if rot_boost_rot_flip:
+        # Preprocess the jet constituents 
+        preprocessed_const_fj= pf.preprocess_nyu(subjets) 
+    #     print('preprocessed_const_fj [pT,eta,phi,m,pz]=',[[const_fj.perp(),const_fj.eta(),const_fj.phi(),const_fj.m(),const_fj.pz()] for const_fj in preprocessed_const_fj])
+    
+    #     
+    #     #--------------------------------
+    #     # Cross-check: leading subjet should have eta=0 (pz=0), phi=0. 2nd leading one should have eta=0 (pz=0). The 3rd one should have pz>0
+#         preprocessed_subjets = pf.recluster(preprocessed_const_fj, R_preprocess,'kt') 
+    #     print(' Number of subjets=',len(preprocessed_subjets))
+#         print('---'*20)
+#         print('Subjets [mass]=',[subjet.m() for subjet in preprocessed_subjets])
+#         print('Subjet mass difference=',np.asarray([subjet.m() for subjet in preprocessed_subjets])-np.asarray([subjet.m() for subjet in subjets]))
+#         print('Subjets [mass,pT,eta,phi,pz]=',[[subjet.m(),subjet.perp(),subjet.eta(), subjet.phi_std(),subjet.pz()] for subjet in preprocessed_subjets])
+    
+    
+        # Recluster preprocessed jet constituents 
+        preprocessed_subjets = pf.recluster(preprocessed_const_fj, 0.8,'kt') 
+#         print(' Number of subjets=',len(preprocessed_subjets))
+#         print('Subjets [mass,pT,eta,phi,pz]=',[[subjet.m(),subjet.perp(),subjet.eta(), subjet.phi_std(),subjet.pz()] for subjet in preprocessed_subjets])   
+#         print('Jet mass difference=',np.asarray([subjet.m() for subjet in preprocessed_subjets])-np.asarray([subjet.m() for subjet in out_jet])) 
+#         jet_mass_difference.append(np.asarray([subjet.m() for subjet in preprocessed_subjets])-np.asarray([subjet.m() for subjet in out_jet]))
+#         jet_mass_difference.append(preprocessed_subjets[0].m()-out_jet[0].m())
+    
+        out_jet=preprocessed_subjets
+#         print('Preprocessed Subjets [mass,pT,eta,phi,pz]=',[[subjet.m(),subjet.perp(),subjet.eta(), subjet.phi_std(),subjet.pz()] for subjet in out_jet])  
+
+
+    #-----------------------------------
+    # Make trees
+    jets_tree = pf.make_tree_list(out_jet)
+#     print('jets_tree=',jets_tree)
+    
+    for tree, content, mass, pt in jets_tree:
+    
+#       print('Content=',content)
+
     
       jet_pT.append(pt)
       jet_mass.append(mass)
@@ -349,19 +415,43 @@ for ifile in range(N_analysis):
       
       counter+=1
 
-    if counter>40000:
-      break
+#     print('===='*20)
+#     print('===='*20)
+    
+#     if counter>0:
+#       break
+
+# print('Max jet_mass_difference with rot=',np.sort(jet_mass_difference)[-50::])
 
 # print('reclustered_jets=',reclustered_jets)
-os.system("mkdir -p ../data/inputTrees/top_tag_reference_dataset")
-out_filename = '../data/inputTrees/top_tag_reference_dataset/tree_'+subjetlist[ifile].split('.')[0]+'_'+str(counter)+'.pkl'
+if rot_boost_rot_flip:
+  out_filename = 'top_tag_reference_dataset/tree_list/tree_'+subjetlist[ifile].split('.')[0]+'_'+str(counter)+'_R_'+str(R_preprocess)+'_rot_boost_rot_flip.pkl'
+else:
+  out_filename = 'top_tag_reference_dataset/tree_list/tree_'+subjetlist[ifile].split('.')[0]+'_'+str(counter)+'.pkl'
 
+
+# SAVE OUTPUT FILE
+print('out_filename=',out_filename)
 with open(out_filename, "wb") as f: pickle.dump(reclustered_jets, f, protocol=2) 
     
-# out_file.close()
+
 
 print('counter=',counter)  
 # sys.exit()
 
   
- 
+  
+  
+  
+    
+    
+    
+    
+       
+#-------------------------------------------------------------------------------------------------------------
+# Make histograms: Input= (out_dir,data,bins,plotname,title,xaxis,yaxis)
+hist_dir='plots/histograms/top_tag_reference_dataset/'
+if not os.path.exists(hist_dir):
+  os.makedirs(hist_dir)
+
+
