@@ -51,22 +51,19 @@ To run:
 #### TreeNiN package structure in [`recnn`](recnn):
 
  - `search_hyperparams.py`: main script that calls preprocess_main.py, train.py and evaluate.py, and runs hyperparameters searches.
- 
-* Parameters to specify before running:
-    - multi_scan function arguments, e.g.:
+    - Parameters to specify before running:
+        - multi_scan function arguments, e.g.:
      ```multi_scan(learning_rates=[5e-4],decays=[0.92], batch_sizes=[64], num_epochs=[40], hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7, dir_name='top_tag_reference_dataset', name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=9) ```
-     - Flags: *PREPROCESS*, *TRAIN_and_EVALUATE*, *EVALUATE*
+        - Flags: *PREPROCESS*, *TRAIN_and_EVALUATE*, *EVALUATE*
  
- * To run:
-     python search_hyperparams.py --gpu=0
+    - To run:
+        python search_hyperparams.py --gpu=0
      
----------------------------
  - `preprocess_main.py`: Preprocess the jet dictionaries and go from the jet constituents 4-momentum vectors to the 7 features for the nodes (|p|, eta, phi, E, E/Ejet, pT and theta).
  
- ------
+ 
  - `train.py`: Call all the other files to load the raw data, create the jet trees, create the batches and train the model. This file calls model/recNet.py, model/data_loader.py, model/preprocess.py and utils.py
  
--
 - `evaluate.py`: loads the weights that give the best val accuracy and gets the accuracy, tpr, fpr, and ROC auc over the test set.
  
  -------------------------------------------------------------------------
@@ -92,7 +89,7 @@ To run:
  -------------------------------------------------------------------------
  utils.py: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
  
- 
+ -------------------------------------------------------------------------
  #### Running the TreeNiN 
  
  1. Set the flag *PREPROCESS=True* and the other ones to False in  `search_hyperparams.py`. This will run `preprocess_main.py` and save the preprocessed in ['../data/preprocessed_trees/`](../data/preprocessed_trees/)
