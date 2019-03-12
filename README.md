@@ -32,18 +32,20 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
 
 ### Package structure in [`top_reference_dataset`](top_reference_dataset):
 
+-`Read_data.ipynb`: Loads the datasets in h5 format, gets the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
+
 -`toptag_reference_dataset_Tree.py`: Loads and reclusters the jet constituents. Creates binary trees with the clustering history of the jets and outputs a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta, phi (also charge, muon ID, etc depending on the information contained in the dataset). Auxiliary scripts that are called:
 
-    - `analysis_functions.py`: auxiliary functions. 
-    - `preprocess_functions.py`: auxiliary functions. 
-    - `tree_cluster_hist.py`: Creates binary trees. If the dataset has more info besides the jet constituents 4-vectors (e.g. charge, muon ID, etc), it runs a recursive function that traverses the tree down to the leaves and then goes back to the root generating the inner nodes values by adding the children values for the extra info.
-    - `jet_image_trim_pt800-900_card.dat`: parameters card with kinematics variables values, clustering algorithm choice, etc. Currently not used.
+   - `analysis_functions.py`: auxiliary functions. 
+   - `preprocess_functions.py`: auxiliary functions. 
+   - `tree_cluster_hist.py`: Creates binary trees. If the dataset has more info besides the jet constituents 4-vectors (e.g. charge, muon ID, etc), it runs a recursive function that traverses the tree down to the leaves and then goes back to the root generating the inner nodes values by adding the children values for the extra info.
+   - `jet_image_trim_pt800-900_card.dat`: parameters card with kinematics variables values, clustering algorithm choice, etc. Currently not used.
 
 
 ### Running the data pipeline
 
 1.  Go to [`top_reference_dataset`](top_reference_dataset) dir. Upload the dataset to [`in_data`](top_reference_dataset/in_data) 
-2. `Read_data.ipynb`: Run the `h5_to_npy` function to load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
+2. Run the `h5_to_npy` function in `Read_data.ipynb` to load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
 
 3. Run:
 
