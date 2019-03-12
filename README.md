@@ -28,27 +28,35 @@ Make sure the following tools are installed and running:
 A description and link to the Top Tag Reference Dataset (provided by Gregor Kasieczka, Michael Russel and Tilman Plehn) can be found [here](https://docs.google.com/document/d/1Hcuc6LBxZNX16zjEGeq16DAzspkDC4nDTyjMp1bWHRo/edit)
 with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6). This dataset contains 1.2M training events, 400k validation events, 400k test events with equal numbers of top quark and qcd jets. Only 4 momentum vectors of the jet constituents.
 
-## Package structure
+## Data Pipeline
 
-#### Data pipeline
+### Package structure in [`top_reference_dataset`](top_reference_dataset):
 
-1.  Go to [`top_reference_dataset`](top_reference_dataset) dir. Upload the dataset to [`in_data`](top_reference_dataset/in_data) 
-2. `Read_data.ipynb`: Run the `h5_to_npy` function to load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
-3. `toptag_reference_dataset_Tree.py`: Loads and reclusters the jet constituents. Creates binary trees with the clustering history of the jets and outputs a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta, phi (also charge, muon ID, etc depending on the information contained in the dataset). Auxiliary scripts that are called:
-    
+-`toptag_reference_dataset_Tree.py`: Loads and reclusters the jet constituents. Creates binary trees with the clustering history of the jets and outputs a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta, phi (also charge, muon ID, etc depending on the information contained in the dataset). Auxiliary scripts that are called:
+
     - `analysis_functions.py`: auxiliary functions. 
     - `preprocess_functions.py`: auxiliary functions. 
     - `tree_cluster_hist.py`: Creates binary trees. If the dataset has more info besides the jet constituents 4-vectors (e.g. charge, muon ID, etc), it runs a recursive function that traverses the tree down to the leaves and then goes back to the root generating the inner nodes values by adding the children values for the extra info.
     - `jet_image_trim_pt800-900_card.dat`: parameters card with kinematics variables values, clustering algorithm choice, etc. Currently not used.
 
-To run:
 
-*python2.7 toptag_reference_dataset_Tree.py jet_image_trim_pt800-900_card.dat val top_reference_dataset/out_data/ ../data/inputTrees/top_tag_reference_dataset/*
+### Running the data pipeline
 
-(The output file with the dictionary for each jet will be saved in [`data/inputTrees/top_tag_reference_dataset/`](data/inputTrees/top_tag_reference_dataset/). Also, change val for train or test to get the run the data pipeline over the test and train sets as well.)
+1.  Go to [`top_reference_dataset`](top_reference_dataset) dir. Upload the dataset to [`in_data`](top_reference_dataset/in_data) 
+2. `Read_data.ipynb`: Run the `h5_to_npy` function to load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
+
+3. Run:
+
+    - *python2.7 toptag_reference_dataset_Tree.py jet_image_trim_pt800-900_card.dat val top_reference_dataset/out_data/ ../data/inputTrees/top_tag_reference_dataset/*
+
+        (The output file with the dictionary for each jet will be saved in [`data/inputTrees/top_tag_reference_dataset/`](data/inputTrees/top_tag_reference_dataset/). Also, change val for train or test to get the run the data pipeline over the test and train sets as well.)
 
 
-#### TreeNiN package structure in [`recnn`](recnn):
+
+-------------------------------------------------------------------------
+## TreeNiN
+
+### Package structure in [`recnn`](recnn):
 
  - `search_hyperparams.py`: main script that calls preprocess_main.py, train.py and evaluate.py, and runs hyperparameters searches.
     - Parameters to specify before running:
@@ -105,7 +113,7 @@ To run:
 -`utils.py`: auxiliary functions for training, logging, loading hyperparameters from json file, etc.
  
  -------------------------------------------------------------------------
- #### Running the TreeNiN 
+ ### Running the TreeNiN 
  
  1. Set the flag *PREPROCESS=True* and the other ones to False in  `search_hyperparams.py`. This will run `preprocess_main.py` and save the preprocessed in ['../data/preprocessed_trees/`](../data/preprocessed_trees/)
  2. Set the flag *TRAIN_and_EVALUATE=True* and the other ones to False in  `search_hyperparams.py`. Specify how many runs to do in the *multi_scan* function.
