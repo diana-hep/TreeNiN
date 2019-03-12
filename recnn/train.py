@@ -503,6 +503,12 @@ if __name__=='__main__':
     model = net.PredictFromParticleEmbeddingGatedNiN(params,make_embedding=net.GRNNTransformGatedNiN).cuda() if params.cuda else net.PredictFromParticleEmbeddingGatedNiN(params,make_embedding=net.GRNNTransformGatedNiN) 
 
 
+  ##-----
+  ## g) Network in network (NiN) -- NiN RecNN ReLU
+  elif architecture=='NiNRecNNReLU':
+    model = net.PredictFromParticleEmbeddingNiNReLU(params,make_embedding=net.GRNNTransformSimpleNiNReLU).cuda() if params.cuda else net.PredictFromParticleEmbeddingNiNReLU(params,make_embedding=net.GRNNTransformSimpleNiNReLU) 
+
+
   ##----------------------------------------------------------------------
   # Output number of parameters of the model
   pytorch_total_params = sum(p.numel() for p in model.parameters())

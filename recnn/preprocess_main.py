@@ -45,7 +45,7 @@ if __name__=='__main__':
 #   nyu=True
   nyu=False
   
-  toptag_reference_dataset=True
+  toptag_reference_dataset=True # If True, specify below the location of the train, val, test input trees
   
   ##--------------------  
   algo=''
@@ -285,9 +285,13 @@ if __name__=='__main__':
   ##-------------------------------------------------------------------------------------------------
   if toptag_reference_dataset:
 
-    toptag_reference_train=dir_jets_subjets+'/tree_train_jets_120001.pkl'
-    toptag_reference_val=dir_jets_subjets+'/tree_val_jets_40001.pkl'
-    toptag_reference_test=dir_jets_subjets+'/tree_test_jets_40001.pkl'
+    toptag_reference_train=dir_jets_subjets+'/tree_train_jets_1200000_R_0.3_rot_boost_rot_flip.pkl'
+    toptag_reference_val=dir_jets_subjets+'/tree_val_jets_400000_R_0.3_rot_boost_rot_flip.pkl'
+    toptag_reference_test=dir_jets_subjets+'/tree_test_jets_400000_R_0.3_rot_boost_rot_flip.pkl'
+
+#     toptag_reference_train=dir_jets_subjets+'/tree_train_jets_120001.pkl'
+#     toptag_reference_val=dir_jets_subjets+'/tree_val_jets_40001.pkl'
+#     toptag_reference_test=dir_jets_subjets+'/tree_test_jets_40001.pkl'
   
 #     toptag_reference_train=dir_jets_subjets+'/tree_train_jets.pkl'
 #     toptag_reference_val=dir_jets_subjets+'/tree_val_jets.pkl'

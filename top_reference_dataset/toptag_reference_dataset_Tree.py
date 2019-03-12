@@ -103,8 +103,8 @@ out_dir=sys.argv[4]
 
 
 
-rot_boost_rot_flip=True
-# rot_boost_rot_flip=False
+# rot_boost_rot_flip=True
+rot_boost_rot_flip=False
 #-------------------------------------------------------------------------------------------------------------
 #Read cardfile
 with open(cardfile) as f:
@@ -425,9 +425,9 @@ for ifile in range(N_analysis):
 
 # print('reclustered_jets=',reclustered_jets)
 if rot_boost_rot_flip:
-  out_filename = 'top_tag_reference_dataset/tree_list/tree_'+subjetlist[ifile].split('.')[0]+'_'+str(counter)+'_R_'+str(R_preprocess)+'_rot_boost_rot_flip.pkl'
+  out_filename = str(out_dir)+'tree_'+subjetlist[ifile].split('.')[0]+'_'+str(counter)+'_R_'+str(R_preprocess)+'_rot_boost_rot_flip.pkl'
 else:
-  out_filename = 'top_tag_reference_dataset/tree_list/tree_'+subjetlist[ifile].split('.')[0]+'_'+str(counter)+'.pkl'
+  out_filename = str(out_dir)+'tree_'+subjetlist[ifile].split('.')[0]+'_'+str(counter)+'.pkl'
 
 
 # SAVE OUTPUT FILE

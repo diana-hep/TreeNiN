@@ -44,18 +44,29 @@ jet_algorithm='kt'
 # architecture='simpleRecNN'
 # architecture = 'leaves_inner_RecNN'
 # architecture = 'NiNRecNN'
+architecture = 'NiNRecNNReLU'
 # architecture = 'NiNRecNN2L3W'
-architecture = 'NiNgatedRecNN'
-#----------------
+# architecture = 'NiNgatedRecNN'
+#-------------------------------------------------------
+
 PREPROCESS=False
 # PREPROCESS=True
 
-TRAIN=True
-# TRAIN=False
+#-----------
+TRAIN_and_EVALUATE=True
+# TRAIN_and_EVALUATE=False
 
 load_weights=False
 # load_weights=True
-#-----------------------------------------------------
+
+#-----------
+# EVALUATE=True
+EVALUATE=False
+
+# restore_file='last'
+restore_file='best'
+
+#-------------------------------------------------------
 PYTHON = sys.executable
 parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', default=2,
@@ -75,7 +86,8 @@ parser.add_argument('--architecture', default=architecture, help="RecNN architec
 #-------------------------------------------------------------------------------------------------------------
 #//////////////////////    FUNCTIONS     //////////////////////////////////////////////
 #-------------------------------------------------------------------------------------------------------------
-
+#------------------------------------------
+# PREPROCESSING
 def launch_preprocessing_job(parent_dir, data_dir, job_name, params,algo):
 
     start_time = time.time()
@@ -99,6 +111,8 @@ def launch_preprocessing_job(parent_dir, data_dir, job_name, params,algo):
     print('Preprocessing time (minutes) = ',elapsed_time/60)
 
 
+#------------------------------------------
+# TRAINING
 def launch_training_job(parent_dir, data_dir, eval_data_dir, job_name, params, GPU,sample_name, algo):
     """Launch training of the model with a set of hyperparameters in parent_dir/job_name
     Args:
@@ -138,14 +152,35 @@ def launch_training_job(parent_dir, data_dir, eval_data_dir, job_name, params, G
     print('Training time (minutes) = ',(elapsed_time-start_time)/60)
 
 
+#------------------------------------------
+# EVALUATION
+def launch_evaluation_job(parent_dir, data_dir, eval_data_dir, job_name, params, GPU,sample_name, algo):
+    """Launch evaluation of the model with a set of hyperparameters in parent_dir/job_name
+    Args:
+        model_dir: (string) directory containing config, weights and log
+        data_dir: (string) directory containing the dataset
+        params: (dict) containing hyperparameters
+    """
+    elapsed_time = time.time()
+    print('Running evaluation of the model')
+    print('----'*20)
+    # Create a new folder in parent_dir with unique_name "job_name"
+    model_dir = os.path.join(parent_dir, job_name)
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
+    print('Model dir=',model_dir)
+
+
     #--------------
     # Launch evaluation with this config
-    cmd_eval = "CUDA_VISIBLE_DEVICES={gpu} {python} evaluate.py --model_dir={model_dir} --data_dir={data_dir} --sample_name={sample_name} --jet_algorithm={algo} --architecture={architecture}".format(gpu=GPU, python=PYTHON, model_dir=model_dir, data_dir=eval_data_dir,sample_name=sample_name, algo=algo, architecture=architecture)
+    cmd_eval = "CUDA_VISIBLE_DEVICES={gpu} {python} evaluate.py --model_dir={model_dir} --data_dir={data_dir} --sample_name={sample_name} --jet_algorithm={algo} --architecture={architecture} --restore_file={restore_file}".format(gpu=GPU, python=PYTHON, model_dir=model_dir, data_dir=eval_data_dir,sample_name=sample_name, algo=algo, architecture=architecture, restore_file=restore_file)
     print(cmd_eval)
     check_call(cmd_eval, shell=True)
 
     eval_time=time.time()
     print('Evaluation time (minutes) = ',(eval_time-elapsed_time)/60)
+    
+    
 #-------------------------------------------------------------------------------------------------------------
 ###///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #-------------------------------------------------------------------------------------------------------------
@@ -201,18 +236,25 @@ if __name__ == "__main__":
                   
                   
                   
-                  
-                  #Run the training - evaluation job
+                  #-----------------------------------------                
+                  # Run preprocess, training, evaluation 
                   if PREPROCESS:
                     launch_preprocessing_job(parent_dir, args.data_dir, job_name, params, jet_algorithm)
                   
-                  if TRAIN:
+                  if TRAIN_and_EVALUATE:
                     for n_run in np.arange(Nrun_start,Nrun_finish):
                       launch_training_job(parent_dir, args.data_dir, args.eval_data_dir, job_name+'/run_'+str(n_run), params, args.gpu, sample_name, jet_algorithm)        
 
+                      launch_evaluation_job(parent_dir, args.data_dir, args.eval_data_dir, job_name+'/run_'+str(n_run), params, args.gpu, sample_name, jet_algorithm)
+
+
+                  if EVALUATE:
+                    for n_run in np.arange(Nrun_start,Nrun_finish):
+                      launch_evaluation_job(parent_dir, args.data_dir, args.eval_data_dir, job_name+'/run_'+str(n_run), params, args.gpu, sample_name, jet_algorithm) 
+
     #---------------------------------------------------------------------------------------------------------
     # SCANS OVER THE HYPERPARAMETER SPACE        
-    #------------------
+    #-------------------
     ##TESTS
 
 #     multi_scan(learning_rates=[5e-3],decays=[0.9], batch_sizes=[8],num_epochs=[1],hidden_dims=[50],jet_numbers=[20], Nfeatures=7,dir_name='networkingNet_rnn_top_qcd/kt',name='kt_1layer_4weights', info='kt_1layer_4weights',sample_name=args.sample_name) #gpu0  s  
@@ -290,13 +332,68 @@ if __name__ == "__main__":
 
 #     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[45],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L6WleavesInnerNiN_ukh', info='',sample_name=args.sample_name,Nrun_start=3,Nrun_finish=6) #gpu1
 
-    multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[45],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L6WleavesInnerNiN_ukh', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=3) #gpu1
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[45],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L6WleavesInnerNiN_ukh', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=3) #gpu1
+
+
+#     multi_scan(learning_rates=[2e-2],decays=[0.845], batch_sizes=[128],num_epochs=[45],hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=3) #gpu1
+
+
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[45],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk_tanh', info='',sample_name=args.sample_name,Nrun_start=3,Nrun_finish=6) #gpu1
+
+
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[45],hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=9,Nrun_finish=12) #gpu1
+
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[50],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk_bgRejectionbest', info='',sample_name=args.sample_name,Nrun_start=15,Nrun_finish=18) #gpu1
+
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[50],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk_bgRejectionbest', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=9) #gpu1
+
+
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128],num_epochs=[40],hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=9) #gpu1
+
+##########################################################
+# Best performing model with architecture = 'NiNRecNNReLU'
+    multi_scan(learning_rates=[5e-4],decays=[0.92], batch_sizes=[64], num_epochs=[40], hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7, dir_name='top_tag_reference_dataset', name=architecture+'_kt_2L4WleavesInnerNiNuk', info='',sample_name=args.sample_name,Nrun_start=6,Nrun_finish=9) #gpu1
+    
+##########################################################
+
+#-------------------------------
+# NYU PREPROCESSING - rot_boost_rot_flip
+
+#Simple
+#     multi_scan(learning_rates=[5e-3],decays=[0.9], batch_sizes=[128], num_epochs=[40], hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7, dir_name='top_tag_reference_dataset', name=architecture+'_kt_R_0.3_rot_boost_rot_flip', info='R_0.3_rot_boost_rot_flip', sample_name=args.sample_name, Nrun_start=6, Nrun_finish=9) #gpu1 
+
+#-------------
+# NiNRelu
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128], num_epochs=[45], hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7, dir_name='top_tag_reference_dataset', name=architecture+'_kt_R_0.3_rot_boost_rot_flip', info='R_0.3_rot_boost_rot_flip', sample_name=args.sample_name, Nrun_start=6, Nrun_finish=9) #gpu1 
+
+# Evaluate on last weights
+#     multi_scan(learning_rates=[2e-3],decays=[0.9], batch_sizes=[128], num_epochs=[45], hidden_dims=[50], jet_numbers=[1200000], Nfeatures=7, dir_name='top_tag_reference_dataset', name=architecture+'_kt_R_0.3_rot_boost_rot_flip_last', info='R_0.3_rot_boost_rot_flip', sample_name=args.sample_name, Nrun_start=7, Nrun_finish=9) #gpu1 
+
+#     multi_scan(learning_rates=[5e-4],decays=[0.92], batch_sizes=[64], num_epochs=[40], hidden_dims=[40], jet_numbers=[1200000], Nfeatures=7, dir_name='top_tag_reference_dataset', name=architecture+'_kt_R_0.3_rot_boost_rot_flip', info='R_0.3_rot_boost_rot_flip', sample_name=args.sample_name, Nrun_start=6, Nrun_finish=9) #gpu1
 
 
 
 
 
-#---------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#----------------------------------------------------------
 # Smaller dataset - tests NiN, etc. We have 120k total training, 40k val and 40 test
 #     multi_scan(learning_rates=[5e-4],decays=[0.9], batch_sizes=[64],num_epochs=[10],hidden_dims=[40], jet_numbers=[120000], Nfeatures=7,dir_name='top_tag_reference_dataset',name=architecture+'_kt_test', info='',sample_name=args.sample_name,Nrun_start=0,Nrun_finish=1) #gpu1 
 
