@@ -4,11 +4,13 @@
 
 # Tree Network in Network (TreeNiN) for Jet Physics
 
-###### **Sebastian Macaluso and Kyle Cranmer**
+### **Sebastian Macaluso and Kyle Cranmer**
 
 ##### **Sebastian Macaluso and Kyle Cranmer**
 
 #### **Sebastian Macaluso and Kyle Cranmer**
+
+ **Sebastian Macaluso and Kyle Cranmer**
 
 Note that this is an early development version. 
 
@@ -27,7 +29,7 @@ Make sure the following tools are installed and running:
 
 - Python 2.7, Python 3.6, packages included in [Anaconda](https://www.anaconda.com/) (Numpy, Scipy, scikit-learn, Pandas), [PyROOT](https://root.cern.ch/pyroot), [FastJet](http://fastjet.fr/), [PyTorch](https://pytorch.org/).
 
-## Using the Tree Neural Network for the *Top Tagging Reference Dataset*
+## Using the TreeNiN for the *Top Tagging Reference Dataset*
 
 A description and link to the Top Tag Reference Dataset (provided by Gregor Kasieczka, Michael Russel and Tilman Plehn) can be found [here](https://docs.google.com/document/d/1Hcuc6LBxZNX16zjEGeq16DAzspkDC4nDTyjMp1bWHRo/edit)
 with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6). This dataset contains 1.2M training events, 400k validation events, 400k test events with equal numbers of top quark and qcd jets. Only 4 momentum vectors of the jet constituents.
