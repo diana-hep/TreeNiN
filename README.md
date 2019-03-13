@@ -1,12 +1,10 @@
-
-[![DOI](https://zenodo.org/badge/160135404.svg)](https://zenodo.org/badge/latestdoi/160135404) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-
 # Tree Network in Network (TreeNiN) for Jet Physics
 
 ### **Sebastian Macaluso and Kyle Cranmer**
 
 Note that this is an early development version. 
+
+[![DOI](https://zenodo.org/badge/160135404.svg)](https://zenodo.org/badge/latestdoi/160135404) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Introduction
 
@@ -16,7 +14,7 @@ To speed up the training, a special batching was implemented in [Louppe et. al. 
 
 We introduced a Network in Network generalization of the simple TreeNN architecture introduced in [Louppe et. al. 2017], where we add fully connected layers at each node of the binary tree before moving forward to the next level. We refer to this model as TreeNiN. In particular, we add 2 NiN layers with ReLU activations. Also, we split weights between internal nodes and leaves, both for the NiN layers and for the initial embedding of the 7 input features of each node. Finally, we introduce two sets of independent weights for the NiN layers of the left and right children of the root node. Our model has 62,651 trainable parameters. Training is performed over 40 epochs with a minibatch of 128 and a learning rate of 0.002 (decayed by a factor of 0.9 after every epoch), using the cross entropy loss function and Adam as the optimizer. 
 
-
+-------------------------------------------------------------------------
 ## Dependencies
 
 Make sure the following tools are installed and running:
@@ -116,18 +114,19 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
 
 -[`utils.py`](recnn/utils.py): auxiliary functions for training, logging, loading hyperparameters from json file, etc.
  
- -------------------------------------------------------------------------
+ 
  ### Running the TreeNiN 
  
  1. Set the flag *PREPROCESS=True* and the other ones to *False* in  `search_hyperparams.py` (This will run `preprocess_main.py` and save the preprocessed data in [`../data/preprocessed_trees/`](../data/preprocessed_trees/)). Specify the *multi_scan* function arguments and run `search_hyperparams.py`. Note: this needs to be run once only, so set  *Nrun_start=0,Nrun_finish=1* in *multi_scan* function.
  
  3. Set the flag *TRAIN_and_EVALUATE=True* and the other ones to *False* in  `search_hyperparams.py` (This will run `train.py` and `evaluate.py`). Specify the *multi_scan* function arguments and run `search_hyperparams.py`. Results will be saved in `experiments/[dir_name]`.
 
-
+-------------------------------------------------------------------------
 ## Acknowledgements
 
 SM gratefully acknowledges the support of NVIDIA Corporation with the donation of a Titan V GPU used for this research.
 
+-------------------------------------------------------------------------
 ## References
 
 If you use this package, please cite this code as
