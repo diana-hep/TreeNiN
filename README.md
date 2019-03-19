@@ -12,7 +12,7 @@ In this method, a tree neural network (TreeNN) is trained on jet trees. The Tree
 
 To speed up the training, a special batching was implemented in [Louppe et al. 2017](https://arxiv.org/abs/1702.00748). Jets are reorganized by levels (e.g. the root node of each tree in the batch is added at level zero, their children at level one, etc). Each level is restructured so that all internal nodes come first, followed by outer nodes (leaves), and zero padding is applied when necessary. We developed a PyTorch implementation to provide GPU acceleration.
 
-We introduced a Network in Network generalization of the simple TreeNN architecture proposed in [Louppe et al. 2017](https://arxiv.org/abs/1702.00748), where we add fully connected layers at each node of the binary tree before moving forward to the next level. We refer to this model as TreeNiN. In particular, we add 2 NiN layers with ReLU activations. Also, we split weights between internal nodes and leaves, both for the NiN layers and for the initial embedding of the 7 input features of each node. Finally, we introduce two sets of independent weights for the NiN layers of the left and right children of the root node. Our model has 62,651 trainable parameters. Training is performed over 40 epochs with a minibatch of 128 and a learning rate of 0.002 (decayed by a factor of 0.9 after every epoch), using the cross entropy loss function and Adam as the optimizer. 
+We introduced a Network in Network generalization of the simple TreeNN architecture proposed in [Louppe et al. 2017](https://arxiv.org/abs/1702.00748), where we add fully connected layers at each node of the binary tree before moving forward to the next level. We refer to this model as TreeNiN. In particular, we add 2 NiN layers with ReLU activations. Also, we split weights between internal nodes and leaves, both for the NiN layers and for the initial embedding of the 7 input features of each node. Finally, we introduce two sets of independent weights for the NiN layers of the left and right children of the root node. Our model has 33,901 trainable parameters. Training is performed over 40 epochs with a minibatch of 128 and a learning rate of 0.002 (decayed by a factor of 0.9 after every epoch), using the cross entropy loss function and Adam as the optimizer. 
 
 -------------------------------------------------------------------------
 ## Dependencies
@@ -21,7 +21,7 @@ Make sure the following tools are installed and running:
 
 - Python 2.7, Python 3.6, packages included in [Anaconda](https://www.anaconda.com/) (Numpy, Scipy, scikit-learn, Pandas), [PyROOT](https://root.cern.ch/pyroot), [FastJet](http://fastjet.fr/), [PyTorch](https://pytorch.org/).
 
-## Using the TreeNiN for the *Top Tagging Reference Dataset*
+## Implementing the TreeNiN to the *Top Tagging Reference Dataset*
 
 A description and link to the Top Tag Reference Dataset (provided by Gregor Kasieczka, Michael Russel and Tilman Plehn) can be found [here](https://docs.google.com/document/d/1Hcuc6LBxZNX16zjEGeq16DAzspkDC4nDTyjMp1bWHRo/edit)
 with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6). This dataset contains 1.2M training events, 400k validation events, 400k test events with equal numbers of top quark and qcd jets. Only 4 momentum vectors of the jet constituents.
@@ -132,12 +132,12 @@ SM gratefully acknowledges the support of NVIDIA Corporation with the donation o
 If you use this package, please cite this code as
 
 ```
-@misc{RecNN,
+@misc{TreeNiN,
 author       = "Macaluso, Sebastian and Cranmer, Kyle",
-title        = "{Recursive neural network for jet physics}",
+title        = "{Tree Network in Network for jet physics}",
 note         = "{DOI: 10.5281/zenodo.2582216}",
 year         = {2019},
-url          = {https://github.com/SebastianMacaluso/RecNN_PyTorch}
+url          = {https://github.com/SebastianMacaluso/TreeNiN}
 }
 ```
 
