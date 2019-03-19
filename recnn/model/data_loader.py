@@ -364,6 +364,17 @@ class DataLoader(object):
 #     print('Nval=',Nval)
 #     print('Ntest=',Ntest)
 #     print('+-+-'*20)
+
+
+    # Shuffle sig and bkg sets independently
+    indices_sig = check_random_state().permutation(len(sig))
+    sig = sig[indices_sig]
+
+    indices_bkg = check_random_state().permutation(len(bkg))
+    bkg = bkg[indices_bkg]
+
+
+
     ##-----------------------------------------------
     # Concatenate sg and bg data
     train_x=np.concatenate((sig[0:N_train],bkg[0:N_train]))
@@ -380,7 +391,7 @@ class DataLoader(object):
 #     print('test_x=',[x['charge']for x in test_x])
     ##-----------------------------------------------
     # Shuffle the sets
-    indices_train = check_random_state(1).permutation(len(train_x))
+    indices_train = check_random_state().permutation(len(train_x))
     print('train_y=',train_y)
     print('train x shape=',train_x.shape)
     print('///'*20)
@@ -388,11 +399,11 @@ class DataLoader(object):
     train_y = train_y[indices_train]
     print('train_y=',train_y)
   
-    indices_dev = check_random_state(2).permutation(len(dev_x))
+    indices_dev = check_random_state().permutation(len(dev_x))
     dev_x = dev_x[indices_dev]
     dev_y = dev_y[indices_dev]
   
-    indices_test = check_random_state(3).permutation(len(test_x))
+    indices_test = check_random_state().permutation(len(test_x))
     test_x = test_x[indices_test]
     test_y = test_y[indices_test]
     

@@ -21,16 +21,16 @@ Make sure the following tools are installed and running:
 
 - Python 2.7, Python 3.6, packages included in [Anaconda](https://www.anaconda.com/) (Numpy, Scipy, scikit-learn, Pandas), [PyROOT](https://root.cern.ch/pyroot), [FastJet](http://fastjet.fr/), [PyTorch](https://pytorch.org/).
 
-## Implementing the TreeNiN to the *Top Tagging Reference Dataset*
+## Implementing the TreeNiN on the *Top Tagging Reference Dataset*
 
-A description and link to the Top Tag Reference Dataset (provided by Gregor Kasieczka, Michael Russel and Tilman Plehn) can be found [here](https://docs.google.com/document/d/1Hcuc6LBxZNX16zjEGeq16DAzspkDC4nDTyjMp1bWHRo/edit)
+A description and link to the Top Tagging Reference Dataset (provided by Gregor Kasieczka, Michael Russel and Tilman Plehn) can be found [here](https://docs.google.com/document/d/1Hcuc6LBxZNX16zjEGeq16DAzspkDC4nDTyjMp1bWHRo/edit)
 with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6). This dataset contains 1.2M training events, 400k validation events, 400k test events with equal numbers of top quark and qcd jets. Only 4 momentum vectors of the jet constituents.
 
 ### Data pipeline structure in [`top_reference_dataset`](top_reference_dataset):
 
--[`Read_data.ipynb`](top_reference_dataset/Read_data.ipynb): Load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in `out_data`.
+-[`Read_data.ipynb`](top_reference_dataset/Read_data.ipynb): Load the datasets in h5 format, get the labels and non-zero values for the jet constituents and save pickle files in [`out_data`](top_reference_dataset/out_data).
 
--[`toptag_reference_dataset_Tree.py`](top_reference_dataset/toptag_reference_dataset_Tree.py): Load and recluster the jet constituents. Create binary trees with the clustering history of the jets and output a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta, phi (also charge, muon ID, etc depending on the information contained in the dataset). Auxiliary scripts that are called:
+-[`toptag_reference_dataset_Tree.py`](top_reference_dataset/toptag_reference_dataset_Tree.py): Load and recluster the jet constituents. Create binary trees with the clustering history of the jets and output a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta and phi values (also charge, muon ID, etc depending on the information contained in the dataset). Auxiliary scripts that are called:
 
    - [`analysis_functions.py`](top_reference_dataset/analysis_functions.py): auxiliary functions. 
    - [`preprocess_functions.py`](top_reference_dataset/preprocess_functions.py): auxiliary functions. 
@@ -84,7 +84,7 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
  
  - [`train.py`](recnn/train.py): Train the model. This file calls `model/recNet.py`, `model/data_loader.py`, `model/preprocess.py`, `model/dataset.py` and `utils.py`
  
-- [`evaluate.py`](recnn/evaluate.py): loads the weights that give the best val accuracy and gets the accuracy, tpr, fpr, and ROC auc over the test set.
+- [`evaluate.py`](recnn/evaluate.py): loads the weights that give the best val accuracy (this could be changed to lowest val loss function value) and gets the accuracy, tpr, fpr, and ROC auc over the test set.
  
  - [`model`](model/):
  
@@ -93,7 +93,7 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
     - [`data_loader.py`](recnn/model/data_loader.py): load the raw data and create the batches:
     
         - Load the jet events and make the trees.
-        - Split the sample into train, cross-validation and test with equal number of sg and bg events. Then shuffle each set.
+        - Shuffle the signal and background sets independently. Split the sample into train, validation and test with equal number of sg and bg events. Then shuffle each set.
         - Load the jet trees, reorganize the tree by levels, create a batch of N jets by appending the nodes of each jet to each level and add zero padding so that all the levels have the same size
         - Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline
  
@@ -110,7 +110,7 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
  
  - [`experiments/[dir_name]`](recnn/experiments/jet_study.ipynb): dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture. For each run, a new directory will be created with files saving the output probabilities on the test set, metrics history after each epoch, best and last weights, etc.
  
- -[`jet_study.ipynb`](recnn/experiments/jet_study.ipynb): Load results from `experiments/[dir_name]`, and get statistics for single and/or multiple runs.
+ -[`jet_study.ipynb`](recnn/experiments/jet_study.ipynb): Load results from `experiments/[dir_name]`, and get results (accuracy, AUC, background rejection, etc) for single and/or multiple runs.
 
 -[`utils.py`](recnn/utils.py): auxiliary functions for training, logging, loading hyperparameters from json file, etc.
  
