@@ -79,7 +79,7 @@ with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3z
     - To run:
         *python3.6 search_hyperparams.py --gpu=0*
      
- - [`preprocess_main.py`](recnn/preprocess_main.py): Preprocess the jet dictionaries and go from the jet constituents 4-momentum vectors to the 7 features for the nodes (|p|, eta, phi, E, E/Ejet, pT and theta).
+ - [`preprocess_main.py`](recnn/preprocess_main.py): Preprocess the jet dictionaries and go from the jet constituents 4-momentum vectors to the 7 features for the nodes (|p|, eta, phi, E, E/Ejet, pT and theta). Before running, define *toptag_reference_train*, *toptag_reference_val* and *toptag_reference_test* with the location and name of the input trees saved in [`data/inputTrees/top_tag_reference_dataset/`](data/inputTrees/top_tag_reference_dataset/) (e.g. `toptag_reference_train=dir_jets_subjets+'/tree_train_jets.pkl'`)
  
  
  - [`train.py`](recnn/train.py): Train the model. This file calls `model/recNet.py`, `model/data_loader.py`, `model/preprocess.py`, `model/dataset.py` and `utils.py`
