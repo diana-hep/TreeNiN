@@ -4,6 +4,8 @@
 
 Note that this is an early development version. 
 
+[Latest DOI](https://zenodo.org/badge/latestdoi/160135404)
+
 [![DOI](https://zenodo.org/badge/160135404.svg)](https://zenodo.org/badge/latestdoi/160135404) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Introduction
