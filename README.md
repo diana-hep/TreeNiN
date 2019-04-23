@@ -19,7 +19,7 @@ We introduced a Network in Network generalization of the simple TreeNN architect
 
 Make sure the following tools are installed and running:
 
-- Python 2.7, Python 3.6, packages included in [Anaconda](https://www.anaconda.com/) (Numpy, Scipy, scikit-learn, Pandas), [FastJet](http://fastjet.fr/), [PyTorch](https://pytorch.org/).
+- Python 2.7, Python 3.6, packages included in [Anaconda](https://www.anaconda.com/) (Numpy, Scipy, scikit-learn, Pandas), [PyROOT](https://root.cern.ch/pyroot), [FastJet](http://fastjet.fr/), [PyTorch](https://pytorch.org/).
 
 ## Implementing the TreeNiN on the *Top Tagging Reference Dataset*
 
