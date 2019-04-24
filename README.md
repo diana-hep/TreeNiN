@@ -54,7 +54,7 @@ Install [docker](https://docs.docker.com/install/)
 Run the container:  
 `docker run [options] -i -t smacaluso/treenin:1.0.0 /bin/bash` 
 
-If loading external files, we should mount the host file inside the docker container at running time. This will import a copy of the file to the chosen location (it also creates the path inside the container if neccesary), e.g. for macOS:  
+If loading external files, we should mount the host file inside the docker container at running time. This will import a copy of the file to the chosen location (it also creates the path inside the container if necessary), e.g. for macOS:  
 `docker run -v [path/to/external/file]:[full/path/to/file/inside/the/container] [options] -i -t smacaluso/treenin:1.0.0 /bin/bash` 
 
 Check `docker run --help` for all the options. Some useful `[options]`:
