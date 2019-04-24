@@ -200,9 +200,9 @@ The TreeNiN code dir is [`recnn`](code/recnn):
 
 - [`experiments`](code/recnn/experiments):
 
-- [`template_params.json`](code/recnn/experiments/template_params.json):  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
+    - [`template_params.json`](code/recnn/experiments/template_params.json):  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
 
-- [`experiments/[dir_name]`](code/recnn/experiments): dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture. For each run, a new directory will be created with files saving the output probabilities on the test set, metrics history after each epoch, best and last weights, etc.
+    - [`experiments/[dir_name]`](code/recnn/experiments): dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture. For each run, a new directory will be created with files saving the output probabilities on the test set, metrics history after each epoch, best and last weights, etc.
 
 - [`jet_study.ipynb`](code/recnn/jet_study.ipynb): Load results from `experiments/[dir_name]`, and get results (accuracy, AUC, background rejection, etc) for single and/or multiple runs.
 
