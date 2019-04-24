@@ -32,16 +32,18 @@ Install [docker](https://docs.docker.com/install/)
 
 1. If building the Docker Image, from the root directory of this repository, run: `docker build --tag=treenin:1.0.0 .`
 
-2. Alternatively, it is easier to download the pre-built image from Docker Hub.
+2. Alternatively, it is easier to download the pre-built image from Docker Hub [here](https://cloud.docker.com/repository/docker/smacaluso/treenin/general):
+
+`docker pull smacaluso/treenin:1.0.0`
 
 **Relevant Structure**:
 
 - [`Dockerfile`](Dockerfile)  
 - [`scripts`](scripts): dir with the scripts to install specific dependencies when building the image.  
-- [`code`](code): working directory for the docker container  
+- [`code`](code): working directory for the docker container.    
     - [`top_reference_dataset`](code/top_reference_dataset)  
-        - [`outProb`](code/top_reference_dataset/outProb): dir with the output probabilities  
-        - [`in_data`](code/top_reference_dataset/in_data): dir where the initial test dataset will be downloaded
+        - [`outProb`](code/top_reference_dataset/outProb): dir with the output probabilities.    
+        - [`in_data`](code/top_reference_dataset/in_data): dir where the initial test dataset will be downloaded.  
     - [`dataWorkflow.py`](code): script with the data workflow.  
     - [`MLWorkflow.py`](code): script with the machine learning workflow.  
     - [`saveProb.py`](code): script that saves the output probabilities in [`outProb/[filename.pkl]`](code/top_reference_dataset/outProb).  
@@ -52,10 +54,10 @@ Install [docker](https://docs.docker.com/install/)
 ### Running the treenin container: 
 
 Run the container:  
-`docker run [options] -i -t treenin:1.0.0 /bin/bash` 
+`docker run [options] -i -t smacaluso/treenin:1.0.0 /bin/bash` 
 
 If loading external files, we should mount the host file inside the docker container at running time. This will import a copy of the file to the chosen location (it also creates the path inside the container if neccesary), e.g. for macOS:  
-`docker run -v [path/to/external/file]:[full/path/to/file/inside/the/container] [options] -i -t treenin:1.0.0 /bin/bash` 
+`docker run -v [path/to/external/file]:[full/path/to/file/inside/the/container] [options] -i -t smacaluso/treenin:1.0.0 /bin/bash` 
 
 Check `docker run --help` for all the options. Some useful `[options]`:
 - `--rm`: Remove the container when we exit.
@@ -77,7 +79,7 @@ The container is ready to run the code on evaluation mode (to run on training mo
     
     -  Loads and reclusters the jet constituents. 
     - Creates binary trees with the clustering history of the jets and outputs a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta and phi values. 
-    - Preprocessing is applied to get the initial 7 features: p, eta, phi, E, E/JetE, pT, theta.
+    - Preprocessing is applied. The initial 7 features are: p, eta, phi, E, E/JetE, pT, theta.
     
     The final preprocessed test dataset is saved here: [`test_top_tag_reference_dataset_kt_1200000_Njets_.pkl`](/code/data/preprocessed_trees/test_top_tag_reference_dataset_kt_1200000_Njets_.pkl)
 
