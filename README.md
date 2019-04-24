@@ -19,7 +19,7 @@ We introduced a Network in Network generalization of the simple TreeNN architect
 ## Implementing the TreeNiN on the *Top Tagging Reference Dataset*
 
 This repository includes all the code needed to implement the TreeNiN on the *Top Tagging Reference Dataset*. A description and link to the Top Tagging Reference Dataset (provided by Gregor Kasieczka, Michael Russel and Tilman Plehn) can be found [here](https://docs.google.com/document/d/1Hcuc6LBxZNX16zjEGeq16DAzspkDC4nDTyjMp1bWHRo/edit)
-with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6). This dataset contains 1.2M training events, 400k validation events, 400k test events with equal numbers of top quark and qcd jets. Only 4 momentum vectors of the jet constituents.
+with the link to download it [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6). This dataset contains about 1.2M training events, 400k validation events, 400k test events with equal numbers of top quark and qcd jets. Only 4 momentum vectors of the jet constituents.
 
 -------------------------------------------------------------------------
 ## Running with Docker (Recommended)
@@ -32,9 +32,7 @@ Install [docker](https://docs.docker.com/install/)
 
 1. If building the Docker Image, from the root directory of this repository, run: `docker build --tag=treenin:1.0.0 .`
 
-2. Alternatively, it is easier to download the pre-built image from Docker Hub [here](https://cloud.docker.com/repository/docker/smacaluso/treenin/general):
-
-`docker pull smacaluso/treenin:1.0.0`
+2. Alternatively, it is easier to download the pre-built image from Docker Hub [here](https://hub.docker.com/r/smacaluso/treenin). In this case run: `docker pull smacaluso/treenin:1.0.0`
 
 **Relevant Structure**:
 
@@ -67,9 +65,9 @@ Check `docker run --help` for all the options. Some useful `[options]`:
 
 The container is ready to run the code on evaluation mode (to run on training mode, follow the instructions on *Training mode* below) . From the [working directory](/code/):
 
-1. Choose one of the two options below to run the data workflow: 
+1. Run the data workflow. Choose one of the two options below: 
 
-    a. Download the [test dataset](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6) from the website:
+    a. Automatically download the [test dataset](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6) from the website:
 `python dataWorkflow.py 0`
             
     b. Load the [test dataset](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6) as an external file (first mount the host file inside the docker container at running time):
@@ -93,6 +91,7 @@ The container is ready to run the code on evaluation mode (to run on training mo
     
     This saves the probabilities here: [`TreeNiN_hd50.pkl`](code/top_reference_dataset/outProb/TreeNiN_hd50.pkl)
    
+   (Note that the `TreeNiN_hd50.pkl` file uploaded to this repository is only for testing purposes and contains 1% of the dataset. This file will be overwritten when running the pipeline. The output probabilities for the full top tagging reference test dataset are here: [`TreeNiN_hd50_full.pkl`](/TreeNiN/code/top_reference_dataset/outProb/TreeNiN_hd50_full.pkl))
 
 #### Training mode:
 
@@ -150,27 +149,27 @@ The data dir is [`top_reference_dataset`](code/top_reference_dataset):
 The TreeNiN code dir is [`recnn`](code/recnn):
 
 - [`search_hyperparams.py`](code/recnn/search_hyperparams.py): main script that calls preprocess_main.py, train.py and evaluate.py; and runs hyperparameters searches.
-- Parameters to specify before running:
-- *multi_scan* function arguments. Determine the hyperparameter values (for a scan input a list of values), *dir_name* and *number of runs=Nrun_finish-Nrun_start*.
-```
-multi_scan(learning_rates=[5e-4],
-decays=[0.92], 
-batch_sizes=[64], 
-num_epochs=[40], 
-hidden_dims=[40], 
-jet_numbers=[1200000], 
-Nfeatures=7, 
-dir_name='top_tag_reference_dataset', 
-name=architecture+'_kt_2L4WleavesInnerNiNuk', 
-info='',
-sample_name=args.sample_name,
-Nrun_start=0,
-Nrun_finish=9) 
-```
-- Flags: *PREPROCESS*, *TRAIN_and_EVALUATE*, *EVALUATE*
+    - Parameters to specify before running:
+    - *multi_scan* function arguments. Determine the hyperparameter values (for a scan input a list of values), *dir_name* and *number of runs=Nrun_finish-Nrun_start*.
+        ```
+        multi_scan(learning_rates=[5e-4],
+        decays=[0.92], 
+        batch_sizes=[64], 
+        num_epochs=[40], 
+        hidden_dims=[40], 
+        jet_numbers=[1200000], 
+        Nfeatures=7, 
+        dir_name='top_tag_reference_dataset', 
+        name=architecture+'_kt_2L4WleavesInnerNiNuk', 
+        info='',
+        sample_name=args.sample_name,
+        Nrun_start=0,
+        Nrun_finish=9) 
+        ```
+    - Flags: *PREPROCESS*, *TRAIN_and_EVALUATE*, *EVALUATE*
 
-- To run:
-`python3 search_hyperparams.py --gpu=0`
+    - To run:
+        `python3 search_hyperparams.py --gpu=0`
 
 - [`run_preprocess.py`](code/recnn/run_preprocess.py): same as search_hyperparams.py but hard-coded to do the preprocessing only.
 
@@ -183,21 +182,21 @@ Nrun_finish=9)
 
 - [`model`](code/recnn/model/):
 
-- [`recNet.py`](code/recnn/model/recNet.py): model architecture for batch training and accuracy function.
+    - [`recNet.py`](code/recnn/model/recNet.py): model architecture for batch training and accuracy function.
 
-- [`data_loader.py`](code/recnn/model/data_loader.py): load the raw data and create the batches:
+    - [`data_loader.py`](code/recnn/model/data_loader.py): load the raw data and create the batches:
 
-- Load the jet events and make the trees.
-- Shuffle the signal and background sets independently. Split the sample into train, validation and test with equal number of sg and bg events. Then shuffle each set.
-- Load the jet trees, reorganize the tree by levels, create a batch of N jets by appending the nodes of each jet to each level and add zero padding so that all the levels have the same size
-- Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline
+        - Load the jet events and make the trees.
+        - Shuffle the signal and background sets independently. Split the sample into train, validation and test with equal number of sg and bg events. Then shuffle each set.
+        - Load the jet trees, reorganize the tree by levels, create a batch of N jets by appending the nodes of each jet to each level and add zero padding so that all the levels have the same size
+        - Generator function that loads the batches, shifts numpy arrays to torch tensors and feeds the training/validation pipeline
 
 
-- [`preprocess.py`](code/recnn/model/preprocess.py): rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
+    - [`preprocess.py`](code/recnn/model/preprocess.py): rewrite and reorganize the jet contents (e.g. add features for each node such as energy, pT, eta, phi, charge, muon ID, etc) 
 
-- [`dataset.py`](code/recnn/model/dataset.py): This script defines:
-- A new subclass of torch.utils.data.Dataset that overrides the *__len__*  and *__getitem__* methods. This allows to call torch.utils.data.DataLoader to generate the batches in parallel with num_workers>1 and speed up the code. 
-- A customized *collate* function to load the batches with torch.utils.data.DataLoader.
+    - [`dataset.py`](code/recnn/model/dataset.py): This script defines:
+        - A new subclass of torch.utils.data.Dataset that overrides the *__len__*  and *__getitem__* methods. This allows to call torch.utils.data.DataLoader to generate the batches in parallel with num_workers>1 and speed up the code. 
+        - A customized *collate* function to load the batches with torch.utils.data.DataLoader.
 
 -[`experiments`](code/recnn/experiments):
 
