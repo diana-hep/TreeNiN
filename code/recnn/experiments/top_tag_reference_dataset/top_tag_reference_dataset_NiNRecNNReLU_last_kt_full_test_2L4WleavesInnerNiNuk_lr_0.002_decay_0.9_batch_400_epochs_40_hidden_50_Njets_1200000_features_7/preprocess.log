@@ -1,0 +1,21 @@
+2019-04-12 15:26:44,212:INFO: sample_name=top_tag_reference_dataset
+2019-04-12 15:26:44,212:INFO: --------------------------------------------------------------------------------
+2019-04-12 15:26:44,213:INFO: sample_filename=top_tag_reference_dataset_kt_1200000_Njets_
+2019-04-12 15:27:14,941:INFO: sample_name=top_tag_reference_dataset
+2019-04-12 15:27:14,942:INFO: --------------------------------------------------------------------------------
+2019-04-12 15:27:14,942:INFO: sample_filename=top_tag_reference_dataset_kt_1200000_Njets_
+2019-04-12 15:27:14,942:INFO: Loading toptag_reference_dataset=../data/inputTrees/top_tag_reference_dataset/tree_test_jets_4000.pkl
+2019-04-12 15:27:34,947:INFO: sample_name=top_tag_reference_dataset
+2019-04-12 15:27:34,947:INFO: --------------------------------------------------------------------------------
+2019-04-12 15:27:34,947:INFO: sample_filename=top_tag_reference_dataset_kt_1200000_Njets_
+2019-04-12 15:27:34,948:INFO: Loading toptag_reference_dataset=../data/inputTrees/top_tag_reference_dataset/tree_test_jets_4000.pkl
+2019-04-12 15:27:35,081:INFO: ------------------------------------------------------------
+2019-04-12 15:31:24,048:INFO: sample_name=top_tag_reference_dataset
+2019-04-12 15:31:24,048:INFO: --------------------------------------------------------------------------------
+2019-04-12 15:31:24,049:INFO: sample_filename=top_tag_reference_dataset_kt_1200000_Njets_
+2019-04-12 15:31:24,049:INFO: Loading toptag_reference_dataset=../data/inputTrees/top_tag_reference_dataset/tree_test_jets_4000.pkl
+2019-04-12 15:31:24,214:INFO: ------------------------------------------------------------
+2019-04-16 10:29:21,876:INFO: sample_name=top_tag_reference_dataset
+2019-04-16 10:29:21,876:INFO: --------------------------------------------------------------------------------
+2019-04-16 10:29:21,877:INFO: sample_filename=top_tag_reference_dataset_kt_1200000_Njets_
+2019-04-16 10:29:21,877:INFO: Loading toptag_reference_dataset=../data/inputTrees/top_tag_reference_dataset/tree_test_jets.pkl
