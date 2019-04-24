@@ -79,7 +79,7 @@ The container is ready to run the code on evaluation mode (to run on training mo
     - Creates binary trees with the clustering history of the jets and outputs a dictionary for each jet that contains the root_id, tree, content (constituents 4-momentum vectors), mass, pT, energy, eta and phi values. 
     - Preprocessing is applied. The initial 7 features are: p, eta, phi, E, E/JetE, pT, theta.
     
-    The final preprocessed test dataset is saved here: [`test_top_tag_reference_dataset_kt_1200000_Njets_.pkl`](/code/data/preprocessed_trees/test_top_tag_reference_dataset_kt_1200000_Njets_.pkl)
+    The final preprocessed test dataset is saved here: [test_top_tag_reference_dataset_kt_1200000_Njets_.pkl](/code/data/preprocessed_trees/test_top_tag_reference_dataset_kt_1200000_Njets_.pkl)
 
 2. Run the TreeNiN workflow (loading previously trained weights):
     `python MLWorkflow.py 0 9`
@@ -89,28 +89,28 @@ The container is ready to run the code on evaluation mode (to run on training mo
 3. Read and save the output probabilities for all the models:
     `python3 saveProb.py`
     
-    This saves the probabilities here: [`TreeNiN_hd50.pkl`](code/top_reference_dataset/outProb/TreeNiN_hd50.pkl)
+    This saves the probabilities here: [TreeNiN_hd50.pkl](code/top_reference_dataset/outProb/TreeNiN_hd50.pkl)
    
-   (Note that the `TreeNiN_hd50.pkl` file uploaded to this repository is only for testing purposes and contains 1% of the dataset. This file will be overwritten when running the pipeline. The output probabilities for the full top tagging reference test dataset are here: [`TreeNiN_hd50_full.pkl`](/TreeNiN/code/top_reference_dataset/outProb/TreeNiN_hd50_full.pkl))
+   (Note that the `TreeNiN_hd50.pkl` file uploaded to this repository is only for testing purposes and contains 1% of the dataset. This file will be overwritten when running the pipeline. The output probabilities for the full top tagging reference test dataset are here: [TreeNiN_hd50_full.pkl](code/top_reference_dataset/outProb/TreeNiN_hd50_full.pkl))
 
 #### Training mode:
 
 ##### **Data pipeline**
 To run on training mode we need to preprocess the train and val datasets as well. Follow the instructions below and rerun for each dataset (train, val, test).
 
-1. Modify the last two lines of [`ReadData.py`](code/top_reference_dataset/ReadData.py)  to load the validation (train) dataset. (You would first need to download the validation and training datasets from [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6) )
+1. Modify the last two lines of [ReadData.py](code/top_reference_dataset/ReadData.py)  to load the validation (train) dataset. (You would first need to download the validation and training datasets from [here](https://desycloud.desy.de/index.php/s/llbX3zpLhazgPJ6) )
 2. `cd `[`TreeNiN_code/top_reference_dataset/`](code/top_reference_dataset/)
 3. `python3 ReadData.py 0`
 4. `python2.7 toptag_reference_dataset_Tree.py jet_image_trim_pt800-900_card.dat test out_data/ ../data/inputTrees/top_tag_reference_dataset/`  
-(The output file with the dictionary for each jet will be saved in [`data/inputTrees/top_tag_reference_dataset/`](code/data/inputTrees/top_tag_reference_dataset/). Also, change `test` for `val` or `train` to run the data pipeline over the validation and train sets.)
-5. Set the flag *test_train_val_datasets=True* in [`preprocess_main.py`](code/recnn/preprocess_main.py).
+(The output file with the dictionary for each jet will be saved in [data/inputTrees/top_tag_reference_dataset/](code/data/inputTrees/top_tag_reference_dataset/). Also, change `test` for `val` or `train` to run the data pipeline over the validation and train sets.)
+5. Set the flag *test_train_val_datasets=True* in [preprocess_main.py](code/recnn/preprocess_main.py).
 6. `cd `[`TreeNiN_code/recnn/`](code/recnn/)
 7. `python3 `[`run_preprocess.py`](code/recnn/run_preprocess.py)
 
 
 ##### **TreeNiN**
 
-1. Set the flag *TRAIN_and_EVALUATE=True* and *EVALUATE=False* in  [`search_hyperparams.py`](code/recnn/search_hyperparams.py) (This will run [`train.py`](code/recnn/train.py) and [`evaluate.py`](code/recnn/evaluate.py)). 
+1. Set the flag *TRAIN_and_EVALUATE=True* and *EVALUATE=False* in  [search_hyperparams.py](code/recnn/search_hyperparams.py) (This will run [train.py](code/recnn/train.py) and [evaluate.py](code/recnn/evaluate.py)). 
 2. Specify the *multi_scan* function arguments as explained below.
 3. Run: `python3 search_hyperparams.py --gpu=0`. Results will be saved in `experiments/[dir_name]`.
 
@@ -150,7 +150,7 @@ The TreeNiN code dir is [`recnn`](code/recnn):
 
 - [`search_hyperparams.py`](code/recnn/search_hyperparams.py): main script that calls preprocess_main.py, train.py and evaluate.py; and runs hyperparameters searches.
     - Parameters to specify before running:
-    - *multi_scan* function arguments. Determine the hyperparameter values (for a scan input a list of values), *dir_name* and *number of runs=Nrun_finish-Nrun_start*.
+        - *multi_scan* function arguments. Determine the hyperparameter values (for a scan input a list of values), *dir_name* and *number of runs=Nrun_finish-Nrun_start*.
         ```
         multi_scan(learning_rates=[5e-4],
         decays=[0.92], 
@@ -166,7 +166,7 @@ The TreeNiN code dir is [`recnn`](code/recnn):
         Nrun_start=0,
         Nrun_finish=9) 
         ```
-    - Flags: *PREPROCESS*, *TRAIN_and_EVALUATE*, *EVALUATE*
+        - Flags: *PREPROCESS*, *TRAIN_and_EVALUATE*, *EVALUATE*
 
     - To run:
         `python3 search_hyperparams.py --gpu=0`
@@ -196,17 +196,17 @@ The TreeNiN code dir is [`recnn`](code/recnn):
 
     - [`dataset.py`](code/recnn/model/dataset.py): This script defines:
         - A new subclass of torch.utils.data.Dataset that overrides the *__len__*  and *__getitem__* methods. This allows to call torch.utils.data.DataLoader to generate the batches in parallel with num_workers>1 and speed up the code. 
-        - A customized *collate* function to load the batches with torch.utils.data.DataLoader.
+        - A customized *collate* function to load the batches with torch.utils.data.DataLoader.  
 
--[`experiments`](code/recnn/experiments):
+- [`experiments`](code/recnn/experiments):
 
 - [`template_params.json`](code/recnn/experiments/template_params.json):  Template file that contains all the architecture parameters and training hyperparameters for a specific run. “search_hyperparams.py” modifies these parameters for each scan
 
 - [`experiments/[dir_name]`](code/recnn/experiments): dir with all the hyperparameter scan results (weights, log files, results) for each sample/architecture. For each run, a new directory will be created with files saving the output probabilities on the test set, metrics history after each epoch, best and last weights, etc.
 
--[`jet_study.ipynb`](code/recnn/jet_study.ipynb): Load results from `experiments/[dir_name]`, and get results (accuracy, AUC, background rejection, etc) for single and/or multiple runs.
+- [`jet_study.ipynb`](code/recnn/jet_study.ipynb): Load results from `experiments/[dir_name]`, and get results (accuracy, AUC, background rejection, etc) for single and/or multiple runs.
 
--[`utils.py`](code/recnn/utils.py): auxiliary functions for training, logging, loading hyperparameters from json file, etc.
+- [`utils.py`](code/recnn/utils.py): auxiliary functions for training, logging, loading hyperparameters from json file, etc.
 
 
 
