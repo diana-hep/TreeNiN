@@ -4,7 +4,7 @@
 
 Note that this is an early development version. 
 
-[![DOI](https://zenodo.org/badge/160135404.svg)](https://zenodo.org/badge/latestdoi/160135404) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/160135404.svg)](https://zenodo.org/badge/latestdoi/160135404) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![docker: pull](https://img.shields.io/badge/docker-pull-green.svg)](https://hub.docker.com/r/smacaluso/treenin) 
 
 ## Introduction
 
